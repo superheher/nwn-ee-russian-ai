@@ -12,5 +12,12 @@ backup/
 # Russifier assets - extracted from the .exe via innoextract (see README)
 payload/
 
+# Generated translation artifacts (regenerable)
+glossary/mined_glossary.tsv
+glossary/anchors.txt
+context/pilot_input.json
+context/pilot_output.json
+context/translated/
+
 # macOS
 .DS_Store
