@@ -1,0 +1,90 @@
+category	en	ru	strref
+Ability scores	Strength	Сила	135
+Ability scores	Dexterity	Ловкость	133
+Ability scores	Constitution	Телосложение	132
+Ability scores	Intelligence	Интеллект	134
+Ability scores	Wisdom	Мудрость	136
+Ability scores	Charisma	Харизма	131
+Classes	Barbarian	Варвар	5213
+Classes	Bard	Бард	2
+Classes	Cleric	Клерик	4
+Classes	Druid	Друид	6
+Classes	Fighter	Боец	8
+Classes	Monk	Монах	10
+Classes	Paladin	Паладин	12
+Classes	Ranger	Рейнджер	14
+Classes	Rogue	Плут	16
+Classes	Sorcerer	Чародей	18
+Classes	Wizard	Волшебник	20
+Classes	Arcane Archer	Волшебный лучник	9003
+Classes	Assassin	Ассасин	9007
+Classes	Blackguard	Чёрный страж	9011
+Classes	Champion of Torm	Чемпион Торма	9015
+Classes	Dwarven Defender	Дворфский защитник	76418
+Classes	Harper Scout	Разведчик арфистов	2956
+Classes	Pale Master	Мастер увядания	9020
+Classes	Shadowdancer	Теневой танцор	2944
+Classes	Shifter	Перевоплотитель	9026
+Classes	Weapon Master	Мастер оружия	9019
+Classes	Red Dragon Disciple	Ученик красного дракона	83489
+Races	Dwarf	Дворф	22
+Races	Elf	Эльф	24
+Races	Gnome	Гном	26
+Races	Half-Elf	Полуэльф	30
+Races	Half-Orc	Полуорк	32
+Races	Halfling	Полурослик	28
+Races	Human	Человек	34
+Alignments	Lawful Good	Закон. добрый	112
+Alignments	Neutral Good	Нейтрал. добрый	115
+Alignments	Chaotic Good	Хаотич. добрый	118
+Alignments	Lawful Neutral	Закон. нейтрал.	113
+Alignments	True Neutral	Истинно нейтрал.	116
+Alignments	Chaotic Neutral	Хаотич. нейтрал.	119
+Alignments	Lawful Evil	Закон. злой	114
+Alignments	Neutral Evil	Нейтрал. злой	117
+Alignments	Chaotic Evil	Хаотич. злой	120
+Saves	Fortitude	Стойкость	317
+Saves	Reflex	Рефлексы	318
+Saves	Will	Воля	319
+Schools	Abjuration	Преграждение	373
+Schools	Conjuration	Вызывание	374
+Schools	Divination	Прорицание	375
+Schools	Enchantment	Зачарование	376
+Schools	Evocation	Воплощение	377
+Schools	Illusion	Иллюзия	378
+Schools	Necromancy	Некромантия	379
+Schools	Transmutation	Преобразование	380
+Skills	Animal Empathy	Сочувствие животным	269
+Skills	Appraise	Оценка	2693
+Skills	Bluff	Обман	8746
+Skills	Concentration	Концентрация	270
+Skills	Disable Trap	Обезвреживание ловушек	271
+Skills	Discipline	Дисциплина	343
+Skills	Heal	Лечение	273
+Skills	Hide	Маскировка	274
+Skills	Intimidate	Запугивание	8756
+Skills	Listen	Тонкий слух	275
+Skills	Lore	Знание	276
+Skills	Move Silently	Тихое передвижение	277
+Skills	Open Lock	Взлом замков	278
+Skills	Parry	Парирование	279
+Skills	Perform	Артистизм	280
+Skills	Persuade	Убеждение	281
+Skills	Pick Pocket	Карманное воровство	282
+Skills	Search	Поиск	284
+Skills	Set Trap	Установка ловушек	285
+Skills	Spellcraft	Колдовство	286
+Skills	Spot	Выслеживание	287
+Skills	Taunt	Насмешка	342
+Skills	Tumble	Акробатика	2695
+Skills	Use Magic Device	Использование магических устройств	288
+Core terms	Armor Class	Класс брони	7099
+Core terms	Hit Points	Здоровье	2296
+Core terms	Spell Resistance	Сопротивление заклинанию	666
+Core terms	Experience	Опыт	314
+Core terms	Level	Уровень	2318
+Core terms	Skill	Навык	3788
+Core terms	Deity	Божество	152
+Core terms	Alignment	Мировоззрение	142
+Core terms	Damage Reduction	Снижение урона	674
+Core terms	Attack Bonus	Бонус к атаке	735

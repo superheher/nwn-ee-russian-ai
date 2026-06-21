@@ -1,0 +1,24 @@
+en	nwn_community	hobby_world	diverges	strref
+Fighter	Боец	Воин	ДА	8
+Ranger	Рейнджер	Следопыт	ДА	14
+Cleric	Клерик	Жрец	ДА	4
+Rogue	Плут	Плут	нет	16
+Sorcerer	Чародей	Чародей	нет	18
+Wizard	Волшебник	Волшебник	нет	20
+Paladin	Паладин	Паладин	нет	12
+Barbarian	Варвар	Варвар	нет	5213
+Bard	Бард	Бард	нет	2
+Druid	Друид	Друид	нет	6
+Monk	Монах	Монах	нет	10
+Strength	Сила	Сила	нет	135
+Dexterity	Ловкость	Ловкость	нет	133
+Constitution	Телосложение	Телосложение	нет	132
+Intelligence	Интеллект	Интеллект	нет	134
+Wisdom	Мудрость	Мудрость	нет	136
+Charisma	Харизма	Харизма	нет	131
+Armor Class	Класс брони	Класс Защиты	ДА	7099
+Hit Points	Здоровье	Хиты	ДА	2296
+Saving Throw	(нет точн.)	Спасбросок	нет	None
+Alignment	Мировоззрение	Мировоззрение	нет	142
+Spell	(нет точн.)	Заклинание	нет	None
+Feat	(нет точн.)	Черта (5e)	нет	None
