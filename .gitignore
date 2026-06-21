@@ -17,7 +17,18 @@ glossary/mined_glossary.tsv
 glossary/anchors.txt
 context/pilot_input.json
 context/pilot_output.json
-context/translated/
+
+# Derived inputs - regenerable from the game + scripts (not committed)
+context/convos/
+context/dialogs/
+context/sysbatches/
+context/otherbatches/
+context/manifests/
+context/worklists/
+context/system_map.json
+context/dialog_index.json
+context/coverage.json
+# NOTE: context/translated/ (our actual translations) IS committed, per-chunk.
 
 # macOS
 .DS_Store

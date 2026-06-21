@@ -180,16 +180,22 @@ def do_install(args):
         sys.exit("ERROR: dialog.tlk is no longer English and there is no English "
                  "reference backup. Verify the game files in Steam and retry.")
 
-    # 2) build the Russian dialog.tlk
-    log("[1/5] Building the Russian dialog.tlk ...")
-    if not dry:
-        os.makedirs(os.path.dirname(BUILT_TLK), exist_ok=True)
-        cmd = [sys.executable, os.path.join(HERE, "build_tlk.py"),
-               "--english-tlk", english_source, "--patcher", patcher,
-               "--out", BUILT_TLK, "--variant", args.variant]
-        if not args.no_adv: cmd.append("--adv")
-        if not args.no_fix_settings: cmd.append("--fix-settings")
-        subprocess.run(cmd, check=True)
+    # 2) build the Russian dialog.tlk (or use our own prebuilt one)
+    if args.no_build:
+        if not os.path.exists(BUILT_TLK):
+            sys.exit(f"ERROR: --no-build set but {BUILT_TLK} does not exist.\n"
+                     f"Build it first: python3 context/assemble_tlk.py")
+        log(f"[1/5] Using prebuilt dialog.tlk: {BUILT_TLK} (--no-build)")
+    else:
+        log("[1/5] Building the Russian dialog.tlk ...")
+        if not dry:
+            os.makedirs(os.path.dirname(BUILT_TLK), exist_ok=True)
+            cmd = [sys.executable, os.path.join(HERE, "build_tlk.py"),
+                   "--english-tlk", english_source, "--patcher", patcher,
+                   "--out", BUILT_TLK, "--variant", args.variant]
+            if not args.no_adv: cmd.append("--adv")
+            if not args.no_fix_settings: cmd.append("--fix-settings")
+            subprocess.run(cmd, check=True)
 
     # 3) install dialog.tlk
     log("[2/5] Installing dialog.tlk ...")
@@ -255,6 +261,10 @@ def main():
     ap.add_argument("--payload", default=DEFAULT_PAYLOAD)
     ap.add_argument("--userdir", default=DEFAULT_USERDIR)
     ap.add_argument("--variant", choices=["main", "zog"], default="main")
+    ap.add_argument("--no-build", action="store_true",
+                    help="install the prebuilt build/dialog.tlk (e.g. our own "
+                         "translation from context/assemble_tlk.py) instead of "
+                         "building from the russifier patcher data")
     ap.add_argument("--no-adv", action="store_true", help="without advanced descriptions")
     ap.add_argument("--no-fix-settings", action="store_true")
     ap.add_argument("--repo", choices=["remap", "english", "utf8"], default="remap",
