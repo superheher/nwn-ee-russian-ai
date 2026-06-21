@@ -1,0 +1,16 @@
+# Python venv
+.venv/
+__pycache__/
+*.pyc
+
+# Build artifact - rebuilt by build_tlk.py / install_ru.py
+build/
+
+# Local backups of the game files + install manifest (machine-specific)
+backup/
+
+# Russifier assets - extracted from the .exe via innoextract (see README)
+payload/
+
+# macOS
+.DS_Store
