@@ -18,7 +18,7 @@ const outDir = `${PROOT}/context/translated/${kind}`
 const glossPath = `${PROOT}/context/glossary_active.json`
 log(`kind=${kind}; inDir=${inDir}`)
 
-const LIST_SCHEMA = { type:'object', properties:{ batches:{ type:'array', items:{type:'string'} } }, required:['batches'] }
+const LIST_SCHEMA = { type:'object', properties:{ batches:{ type:'array', items:{type:'string'} }, done:{ type:'array', items:{type:'string'} } }, required:['batches'] }
 const TR_SCHEMA = { type:'object', properties:{ translations:{ type:'array', items:{ type:'object', properties:{ strref:{type:'integer'}, en:{type:'string'}, ru:{type:'string'} }, required:['strref','en','ru'] } } }, required:['translations'] }
 
 function tagsOf(s){ return (String(s).match(/<[^>\n]+>/g) || []).filter(t=>!t.includes('/')).slice().sort() }
@@ -43,12 +43,19 @@ const KIND_RULES = kind === 'sys'
 
 phase('Load')
 const listed = await agent(
-  `List the .json files in ${inDir} (use shell: ls). Return their basenames WITHOUT the .json extension as "batches". Do not translate anything.`,
+  `List .json basenames (WITHOUT the .json extension) in two directories using shell ls.
+Return:
+- "batches": every basename in ${inDir}
+- "done": every basename in ${outDir} (this directory may not exist yet — if ls errors, return an empty list for "done").
+Do not translate anything.`,
   { label:`list:${kind}`, phase:'Load', schema:LIST_SCHEMA, agentType:'general-purpose' }
 )
 let batches = (listed && listed.batches) || []
+const doneSet = new Set((listed && listed.done) || [])
+const already = batches.filter(b => doneSet.has(b)).length
+batches = batches.filter(b => !doneSet.has(b))          // idempotent: skip batches already translated
 if (A.limit) batches = batches.slice(0, A.limit)
-log(`${kind}: ${batches.length} batches queued`)
+log(`${kind}: ${batches.length} batches queued (${already} already done, skipped)`)
 
 const COMMON = `Preserve identifier <...> tags, printf %s/%d/%c placeholders, literal newlines and numbers EXACTLY (same count, same spelling). EXCEPTION: gender-fork tokens like <man/woman>, <he/she>, <his/her> must be replaced with natural Russian (they print English by gender). Russian typography: «ёлочки», em dash —, use ё. ${KIND_RULES}`
 
