@@ -1,0 +1,280 @@
+{
+ "terms": [
+  {
+   "strref": 90436,
+   "en": "Composite Longbow +4"
+  },
+  {
+   "strref": 90438,
+   "en": "Composite Longbow +5"
+  },
+  {
+   "strref": 90439,
+   "en": "Composite Shortbow +4"
+  },
+  {
+   "strref": 90440,
+   "en": "Composite Shortbow +5"
+  },
+  {
+   "strref": 90446,
+   "en": "Drow Large Shield +2"
+  },
+  {
+   "strref": 90447,
+   "en": "Drow Large Shield +3"
+  },
+  {
+   "strref": 90448,
+   "en": "Drow Large Shield +5"
+  },
+  {
+   "strref": 90456,
+   "en": "Full Plate +6"
+  },
+  {
+   "strref": 90457,
+   "en": "Large Shield +6"
+  },
+  {
+   "strref": 90458,
+   "en": "Large Shield +7"
+  },
+  {
+   "strref": 90462,
+   "en": "Small Shield +6"
+  },
+  {
+   "strref": 90463,
+   "en": "Small Shield +7"
+  },
+  {
+   "strref": 90464,
+   "en": "Tower Shield +6"
+  },
+  {
+   "strref": 90465,
+   "en": "Tower Shield +7"
+  },
+  {
+   "strref": 91114,
+   "en": "Club +6"
+  },
+  {
+   "strref": 91115,
+   "en": "Club +7"
+  },
+  {
+   "strref": 91118,
+   "en": "Heavy Flail +6"
+  },
+  {
+   "strref": 91119,
+   "en": "Heavy Flail +7"
+  },
+  {
+   "strref": 91122,
+   "en": "Light Flail +6"
+  },
+  {
+   "strref": 91123,
+   "en": "Light Flail +7"
+  },
+  {
+   "strref": 91126,
+   "en": "Light Hammer +6"
+  },
+  {
+   "strref": 91127,
+   "en": "Light Hammer +7"
+  },
+  {
+   "strref": 91132,
+   "en": "Warhammer +6"
+  },
+  {
+   "strref": 91133,
+   "en": "Warhammer +7"
+  },
+  {
+   "strref": 91138,
+   "en": "Mace +6"
+  },
+  {
+   "strref": 91139,
+   "en": "Mace +7"
+  },
+  {
+   "strref": 91142,
+   "en": "Morningstar +6"
+  },
+  {
+   "strref": 91143,
+   "en": "Morningstar +7"
+  },
+  {
+   "strref": 91146,
+   "en": "Longbow +6"
+  },
+  {
+   "strref": 91147,
+   "en": "Longbow +7"
+  },
+  {
+   "strref": 91148,
+   "en": "Composite Longbow +6"
+  },
+  {
+   "strref": 91149,
+   "en": "Composite Longbow +7"
+  },
+  {
+   "strref": 91154,
+   "en": "Shortbow +6"
+  },
+  {
+   "strref": 91155,
+   "en": "Shortbow +7"
+  },
+  {
+   "strref": 91156,
+   "en": "Composite Shortbow +6"
+  },
+  {
+   "strref": 91157,
+   "en": "Composite Shortbow +7"
+  },
+  {
+   "strref": 91160,
+   "en": "Sling +6"
+  },
+  {
+   "strref": 91161,
+   "en": "Sling +7"
+  },
+  {
+   "strref": 91164,
+   "en": "Heavy Crossbow +6"
+  },
+  {
+   "strref": 91165,
+   "en": "Heavy Crossbow +7"
+  },
+  {
+   "strref": 91168,
+   "en": "Light Crossbow +6"
+  },
+  {
+   "strref": 91169,
+   "en": "Light Crossbow +7"
+  },
+  {
+   "strref": 91172,
+   "en": "Double Axe +6"
+  },
+  {
+   "strref": 91173,
+   "en": "Double Axe +7"
+  },
+  {
+   "strref": 91176,
+   "en": "Dire Mace +6"
+  },
+  {
+   "strref": 91177,
+   "en": "Dire Mace +7"
+  },
+  {
+   "strref": 91180,
+   "en": "Quarterstaff +6"
+  },
+  {
+   "strref": 91181,
+   "en": "Quarterstaff +7"
+  },
+  {
+   "strref": 91188,
+   "en": "Two-Bladed Sword +6"
+  },
+  {
+   "strref": 91189,
+   "en": "Two-Bladed Sword +7"
+  },
+  {
+   "strref": 91192,
+   "en": "Drow Light Flail +2"
+  },
+  {
+   "strref": 91193,
+   "en": "Drow Light Flail +3"
+  },
+  {
+   "strref": 91194,
+   "en": "Drow Light Flail +5"
+  },
+  {
+   "strref": 91195,
+   "en": "Drow Longsword +2"
+  },
+  {
+   "strref": 91196,
+   "en": "Drow Longsword +3"
+  },
+  {
+   "strref": 91197,
+   "en": "Drow Longsword +5"
+  },
+  {
+   "strref": 91198,
+   "en": "Drow Venomblade +3"
+  },
+  {
+   "strref": 91199,
+   "en": "Duergar Battleaxe +2"
+  },
+  {
+   "strref": 91200,
+   "en": "Duergar Battleaxe +3"
+  },
+  {
+   "strref": 91201,
+   "en": "Duergar Battleaxe +5"
+  },
+  {
+   "strref": 91202,
+   "en": "Duergar Greataxe +2"
+  },
+  {
+   "strref": 3110,
+   "en": "bracie"
+  },
+  {
+   "strref": 3111,
+   "en": "siostro"
+  },
+  {
+   "strref": 3112,
+   "en": "Bracie"
+  },
+  {
+   "strref": 3113,
+   "en": "Siostro"
+  },
+  {
+   "strref": 3114,
+   "en": "Ch³opcze"
+  },
+  {
+   "strref": 3115,
+   "en": "Dziewczyno"
+  },
+  {
+   "strref": 3116,
+   "en": "ch³opcze"
+  },
+  {
+   "strref": 3117,
+   "en": "dziewczyno"
+  }
+ ]
+}
