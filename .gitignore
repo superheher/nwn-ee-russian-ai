@@ -46,5 +46,13 @@ ddf/index.json
 ddf/override/
 ddf/override_manifest.txt
 
+# Premium DLC modules (Daggerford, Moonsea, Infinite Dungeons, etc.) — same rule as
+# DDF/DoID: extracted ENGLISH source (batches/index) not committed (Beamdog IP,
+# regenerable from the game); our RU translations (dlc/*/translated/) ARE committed.
+dlc/*/batches/
+dlc/*/index.json
+dlc/*/*.nwm
+dlc/*/*.mod
+
 # macOS
 .DS_Store
