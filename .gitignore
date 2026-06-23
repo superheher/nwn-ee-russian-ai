@@ -37,5 +37,12 @@ doid/strings.json
 doid/*.en.json
 doid/pilot.*.json
 
+# DDF (Dark Dreams of Furiae) DLC — same rule: module/hak binaries + extracted
+# English source not committed; our RU translations (ddf/translated/) ARE committed.
+ddf/*.nwm
+ddf/*.hak
+ddf/batches/
+ddf/index.json
+
 # macOS
 .DS_Store
