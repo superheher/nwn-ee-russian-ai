@@ -43,6 +43,8 @@ ddf/*.nwm
 ddf/*.hak
 ddf/batches/
 ddf/index.json
+ddf/override/
+ddf/override_manifest.txt
 
 # macOS
 .DS_Store
