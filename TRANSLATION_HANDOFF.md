@@ -38,6 +38,17 @@ Neverwinter Nights: Enhanced Edition с английского** (LLM + конт
 валидатора (`>>`-артефакт, драконья речь), часть — единичные просевшие/лишние теги
 (`<quarterday>`, `<race>`, `<FullName>`). Не блокирует; чистится точечно по желанию.
 
+**Покрытие по модулям (что переведено, а что нет):**
+- ✅ Переведено = весь `dialog.tlk` (100%): база/система/интерфейс/предметы/журнал **+ оригинальная
+  кампания «The Wailing Death» (Пролог + Главы 1–4) + Shadows of Undrentide + Hordes of the Underdark**.
+  Эти кампании берут текст из общего `dialog.tlk`, который переведён целиком.
+- ❌ НЕ переведены доп-модули (свой текст лежит внутри `.mod/.nwm`, не в `dialog.tlk`; по-русски только
+  их названия/блёрбы из `repository.json`): 8 премиум-модулей (`data/mod/`: Kingmaker, ShadowGuard,
+  Witch's Wake, Contest of Champions, The Dark Ranger's Treasure, The Winds of Eremor, To Heir is Human,
+  Neverwinter Chess) и DLC-приключения (Tyrants of the Moonsea, Darkness over Daggerford, Pirates of the
+  Sword Coast, Wyvern Crown of Cormyr, Infinite Dungeons, Dark Dreams of Furiae, **Doom of Icewind Dale 2025**).
+  Перевод допов — отдельный путь (строки внутри `.mod`, а не один tlk). См. DLC-проект ниже/в памяти.
+
 ## Раздача через Steam Workshop (2026-06-23)
 
 Перевод можно раздавать **через Steam Workshop** (подтверждено живым примером — установка
