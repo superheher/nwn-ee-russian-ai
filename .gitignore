@@ -30,5 +30,11 @@ context/dialog_index.json
 context/coverage.json
 # NOTE: context/translated/ (our actual translations) IS committed, per-chunk.
 
+# DoID DLC (premium/paid): module binary + extracted ENGLISH source are NOT committed
+# (Beamdog IP, regenerable from the game). Our RU translations under doid/translated/ ARE committed.
+doid/*.nwm
+doid/strings.json
+doid/*.en.json
+
 # macOS
 .DS_Store
