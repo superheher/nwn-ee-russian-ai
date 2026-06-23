@@ -28,12 +28,14 @@
 
 ```bash
 # собрать каталог айтема из build/dialog.tlk + шрифтов (+ опц. repository.json):
-python3 context/make_workshop_item.py --thumbnail "<путь к картинке>" --with-repo
-# → build/workshop/nwn_ru_own/
+python3 context/make_workshop_item.py --thumbnail "<путь к картинке>" --with-repo \
+  --out "build/workshop/[AI] Russian Text Translation"
+# имя --out ДОЛЖНО точно совпадать с ЗАГОЛОВКОМ айтема в Workshop, иначе повторная
+# загрузка создаст дубликат (см. «Обновление и дубликаты» ниже).
 ```
-Затем в игре: открыть консоль клавишей `~` и ввести
+Затем в игре: открыть консоль клавишей `~` и ввести (путь с пробелами поддерживается):
 ```
-WorkshopUpload /Users/heh/Downloads/neverwi/nwn_ru_mac/build/workshop/nwn_ru_own
+WorkshopUpload /Users/heh/Downloads/neverwi/nwn_ru_mac/build/workshop/[AI] Russian Text Translation
 ```
 - Требование Steam: на аккаунте должно быть потрачено ≥ $5.
 - Новый айтем сперва приватный и «на авто-проверке контента» — это норма; публичным
