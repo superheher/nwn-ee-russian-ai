@@ -35,6 +35,7 @@ context/coverage.json
 doid/*.nwm
 doid/strings.json
 doid/*.en.json
+doid/pilot.*.json
 
 # macOS
 .DS_Store
