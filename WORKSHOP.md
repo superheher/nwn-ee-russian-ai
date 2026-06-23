@@ -11,6 +11,7 @@
 ```
 <item>/
 ├── thumbnail.png        превью Workshop (Steam: ≤1 МБ; квадрат — делаем 512×512)
+├── tags.txt             КАТЕГОРИЯ айтема, по одному тегу на строку (override, Russian)
 ├── override/            = Documents/Neverwinter Nights/override/
 │   ├── dialog.tlk       наш перевод (CP1251)
 │   └── <шрифты>         fnt_*, bitter_*, merriw_reg, mordred_bold, tnr, ...
@@ -39,6 +40,20 @@ WorkshopUpload /Users/heh/Downloads/neverwi/nwn_ru_mac/build/workshop/nwn_ru_own
 - Требование Steam: на аккаунте должно быть потрачено ≥ $5.
 - Новый айтем сперва приватный и «на авто-проверке контента» — это норма; публичным
   делается на странице айтема (Видимость → Public).
+
+## Категория айтема (tags.txt)
+
+Категория **не задаётся автоматически и не выбирается на сайте** — её определяет файл
+`tags.txt` в корне айтема, по одному тегу на строку. Для нашего перевода:
+```
+override
+Russian
+```
+`override` — подмена файлов игры (наш случай: `dialog.tlk` + шрифты); `Russian` — язык
+(тег принимается, проверено на чужом айтеме `2270807144`: `Russian/movies/voices/override`).
+`make_workshop_item.py` пишет `tags.txt` сам (по умолчанию `--tags "override,Russian"`).
+Применить к уже опубликованному айтему: положить `tags.txt` в каталог и повторно
+`WorkshopUpload <путь>`. Если категория не обновилась — проверить на странице айтема «Изменить».
 
 ## Эксперимент: repository.json (экран выбора кампаний)
 

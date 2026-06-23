@@ -48,6 +48,9 @@ def main():
     ap.add_argument("--payload", default=os.path.join(PROOT, "payload"))
     ap.add_argument("--with-repo", action="store_true",
                     help="include experimental data/{mod,nwm}/repository.json")
+    ap.add_argument("--tags", default="override,Russian",
+                    help="comma-separated Workshop category tags -> tags.txt (NWN:EE "
+                         "reads the category from this file, one tag per line)")
     args = ap.parse_args()
 
     if os.path.exists(args.out):
@@ -77,6 +80,12 @@ def main():
         subprocess.run(["sips", "-Z", "512", "-s", "format", "png",
                         args.thumbnail, "--out", thumb], check=True, capture_output=True)
         print(f"  thumbnail.png (<=512x512)")
+
+    tags = [t.strip() for t in args.tags.split(",") if t.strip()]
+    if tags:
+        with open(os.path.join(args.out, "tags.txt"), "w") as f:
+            f.write("\n".join(tags) + "\n")
+        print(f"  tags.txt: {', '.join(tags)}")
 
     # total size
     total = sum(os.path.getsize(os.path.join(r, f))
