@@ -27,50 +27,47 @@
 ## Сборка и загрузка
 
 ```bash
-# собрать каталог айтема. Имя папки (--out) — БЕЗ ПРОБЕЛОВ (см. предупреждение ниже):
-python3 context/make_workshop_item.py --thumbnail "<путь к картинке>" --with-repo
-# → build/workshop/nwn_ru_own/
+# собрать каталог айтема (ограничения на ИМЯ папки --out — ниже):
+python3 context/make_workshop_item.py --thumbnail "<путь к картинке>" --with-repo \
+  --out "build/workshop/<имя = будущий заголовок>"
 ```
-Затем в игре: открыть консоль клавишей `~` и ввести:
+Затем в игре: открыть консоль клавишей `~` и ввести (путь — БЕЗ кавычек):
 ```
-WorkshopUpload /Users/heh/Downloads/neverwi/nwn_ru_mac/build/workshop/nwn_ru_own
+WorkshopUpload /Users/heh/Downloads/neverwi/nwn_ru_mac/build/workshop/<имя>
 ```
-- ⚠️ **ПУТЬ БЕЗ ПРОБЕЛОВ.** Внутриигровая консоль рвёт аргумент на первом пробеле:
-  `.../[AI] Russian Text Translation` читается как `.../[AI]` (нет такой папки) → заливается
-  ПУСТОЙ айтем без картинки/контента. Проверено 2026-06-23. Поэтому имя папки — без пробелов.
-- Требование Steam: на аккаунте должно быть потрачено ≥ $5.
-- Новый айтем сперва приватный и «на авто-проверке контента» — это норма; публичным
-  делается на странице айтема (Видимость → Public).
+**Ограничения на ИМЯ папки/путь (проверено на macOS 2026-06-23):**
+- **Путь пиши СЫРЫМ, без кавычек/экранирования.** Одинарные/двойные кавычки и `\`-экранирование
+  НЕ работают; сырой путь — работает.
+- **Пробелы — МОЖНО.** Папка с пробелами заливается нормально, пробелы попадают и в имя работы.
+- **Квадратные скобки `[ ]` — НЕЛЬЗЯ:** консоль их молча выбрасывает → путь не находится →
+  заливается ПУСТОЙ айтем на 0 байт. (В видимом ЗАГОЛОВКЕ скобки можно — он задаётся на сайте;
+  нельзя именно в имени ПАПКИ, а значит и в имени, по которому идёт матчинг обновления.)
+- **Кириллица / не-ASCII — НЕЛЬЗЯ:** символы становятся `?` → путь не находится → пустой айтем.
+  Имя папки держи на латинице.
+- Steam: на аккаунте потрачено ≥ $5. Новый айтем сперва приватный/«на авто-проверке» — норма.
 
-### Обновление и дубликаты (важно!)
+### Обновление (проверено на macOS 2026-06-23)
 
-Две связанные грабли (обе ловили нас 2026-06-23 — вышло несколько лишних работ):
-1. **Пробелы в пути** ломают `WorkshopUpload` → пустой дубликат (см. выше).
-2. **Адресовать существующий айтем по ID нельзя** — `WorkshopUpload` принимает только путь и
-   решает «обновить или создать» по совпадению **имени папки с текущим ЗАГОЛОВКОМ айтема**.
-   Сменил заголовок на сайте → имя папки уже не совпадает → новая загрузка плодит ДУБЛИКАТ.
+Команда одна — `WorkshopUpload`; адресовать айтем по ID нельзя. «Обновить или создать» решается
+по совпадению **имени папки с ЗАГОЛОВКОМ работы**. Обновление РАБОТАЕТ (проверено: папка с
+пробелами залилась как новая работа; затем переименовал работу и папку одинаково → повторная
+заливка нашла и ОБНОВИЛА нужную работу). Условия:
+1. Имя папки == заголовку работы (с учётом ограничений на символы выше: пробелы можно,
+   скобки/кириллицу — нельзя).
+2. **ГЛАВНАЯ ловушка (потеряли на ней часы):** если заголовок работы задан на НЕСКОЛЬКИХ ЯЗЫКАХ
+   (напр. заполнены и английский, и русский title), матчинг НЕ срабатывает, пока все языковые
+   заголовки не СИНХРОНИЗИРОВАНЫ в одну строку. Привели и EN, и RU title к одному английскому
+   названию — только тогда обновление нашло работу. Это и была причина, почему первая работа
+   упорно дублировалась вместо обновления.
+3. Обновление может проявиться не сразу — иногда «на следующий день» (коммент #23 в треде).
 
-Из (1)+(2): **надёжно обновлять «на месте» можно ТОЛЬКО если ЗАГОЛОВОК айтема — без пробелов**
-(тогда папка без пробелов == заголовок, и команда не рвётся). С красивым заголовком с пробелами
-любая повторная загрузка создаёт новый айтем — ограничение инструмента на macOS/Linux, не наша
-ошибка. **Подтверждено сообществом** (обсуждение Beamdog, коммент #31): юзер на Linux Mint не
-смог залить «Jason's PnP» (пробел+апостроф) — пришлось переименовать папку в «JasonsPnP»; кавычки
-не помогают. Он же уперся в то же самое: переименовал заголовок на сайте → обновлять больше
-нельзя, только пересоздавать. На Windows пробелы в пути работают (потому офиц. гайд с примером
-«BG2 Themed GUI (By lizard-man)» и сбивает с толку) — но это Windows-only.
+Успех в консоли: «You already have a mod on Workshop with this name. Updating your mod with new
+files.» Если вместо этого «Uploading your mod: …» и появилась новая работа — имя/заголовок не
+совпали (проверь символы и синхронизацию языковых заголовков).
 
-**Два реальных варианта (выбор наш):**
-- **A — красивый заголовок с пробелами:** обновлять «на месте» НЕЛЬЗЯ; любое изменение =
-  пересоздать айтем (удалить + залить заново), теряя подписчиков/скриншоты. Ок для готового перевода.
-- **B — заголовок БЕЗ пробелов, ровно == имени папки** (напр. `NWN_EE_Russian_AI` или
-  `[AI]_Russian_Text_Translation`; подчёркивания/дефисы, без пробелов и апострофов): обновления
-  работают штатно, тег `override` доезжает вместе с обновлением. Менее нарядно, но рабоче.
-
-Практика:
-- Заголовок/описание/видимость правь **на странице айтема** — без перезаливки.
-- Вариант B: держи имя папки сборки идентичным заголовку (`make_workshop_item.py --out "...<тот же текст>"`).
-- Обновление может появиться не сразу — бывает «на следующий день» (коммент #23), это норма.
-- Лишние/пустые копии удаляй: страница айтема → Owner Controls / меню «…» → Delete.
+**Итого для обновляемой работы:** заголовок (и ВСЕ его языковые версии) — латиница, можно с
+пробелами, БЕЗ квадратных скобок; имя папки сборки = ровно этот заголовок. Лишние/пустые копии
+удаляй на странице работы (Owner Controls / «…» → Delete).
 
 ## Категория айтема (tags.txt)
 
@@ -153,3 +150,35 @@ There may be occasional inaccuracies or stylistic rough edges — leave a commen
 1С-производного русификатора ZoG (`glossary/mined_glossary.tsv`). Плюс сам текст игры —
 IP Beamdog/WotC. Поэтому «copyright-free» некорректно и рискованно — в описании копирайт-
 claim не ставим; хватает тега `[AI]`. Подробности — handoff и память проекта.
+
+## Заметка для треда Beamdog (EN) — все факты проверены на macOS 2026-06-23
+
+Текст ниже опубликован/предназначен для треда «How to upload files to the Steam Workshop».
+
+```
+macOS notes for WorkshopUpload (path handling + updating), in case it saves someone the
+hours it cost me. All of this was tested on macOS — Windows seems more forgiving (people
+clearly have brackets in their titles there).
+
+Path / folder-name rules:
+- Write the path RAW after the command. Single quotes, double quotes, and backslash-escaping
+  all failed for me; only the unquoted path worked.
+- Spaces in the folder name are FINE on macOS — they upload and even carry into the item name.
+- Square brackets [ ] in the FOLDER name are silently stripped, so the path no longer resolves
+  and you get a 0-byte empty item. (Brackets in the visible title are fine — set the title on
+  the website; just keep them out of the upload folder name.)
+- Non-Latin characters (e.g. Cyrillic) in the folder name become "?" -> bad path -> empty item.
+  Keep the folder name ASCII.
+
+Updating an existing item (this DOES work on macOS):
+- Re-upload from a folder whose name exactly matches the item's title. Success message:
+  "You already have a mod on Workshop with this name. Updating your mod with new files."
+  If instead you see "Uploading your mod: ..." and a new item appears, the names didn't match.
+- The gotcha that cost me hours: if your item has a localized title in more than one language
+  (e.g. you filled in both an English and a Russian title), the name-match for updates FAILS
+  until ALL localized titles are set to the same string. Once I made every language's title
+  identical, the update finally landed on the existing item instead of creating duplicates.
+
+So on macOS, for an item you intend to keep updating: the title (in every language) should be
+ASCII, spaces are OK, no square brackets; and name your upload folder exactly that title.
+```
