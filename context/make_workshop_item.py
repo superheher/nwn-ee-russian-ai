@@ -48,9 +48,11 @@ def main():
     ap.add_argument("--payload", default=os.path.join(PROOT, "payload"))
     ap.add_argument("--with-repo", action="store_true",
                     help="include experimental data/{mod,nwm}/repository.json")
-    ap.add_argument("--tags", default="override,Russian",
-                    help="comma-separated Workshop category tags -> tags.txt (NWN:EE "
-                         "reads the category from this file, one tag per line)")
+    ap.add_argument("--tags", default="override",
+                    help="comma-separated Workshop category tags -> tags.txt, one per line. "
+                         "NWN:EE predefined tags ONLY: module tileset hak compilation "
+                         "persistentworld override singleplayer multiplayer music sound "
+                         "voices textures models portraits script")
     args = ap.parse_args()
 
     if os.path.exists(args.out):

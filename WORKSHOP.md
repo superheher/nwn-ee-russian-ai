@@ -11,7 +11,7 @@
 ```
 <item>/
 ├── thumbnail.png        превью Workshop (Steam: ≤1 МБ; квадрат — делаем 512×512)
-├── tags.txt             КАТЕГОРИЯ айтема, по одному тегу на строку (override, Russian)
+├── tags.txt             КАТЕГОРИЯ айтема, по одному тегу на строку (у нас: override)
 ├── override/            = Documents/Neverwinter Nights/override/
 │   ├── dialog.tlk       наш перевод (CP1251)
 │   └── <шрифты>         fnt_*, bitter_*, merriw_reg, mordred_bold, tnr, ...
@@ -44,16 +44,20 @@ WorkshopUpload /Users/heh/Downloads/neverwi/nwn_ru_mac/build/workshop/nwn_ru_own
 ## Категория айтема (tags.txt)
 
 Категория **не задаётся автоматически и не выбирается на сайте** — её определяет файл
-`tags.txt` в корне айтема, по одному тегу на строку. Для нашего перевода:
+`tags.txt` в корне айтема: по одному тегу на строку, без пустых строк (официальный гайд
+Beamdog). Допустимы **ровно эти 15 тегов**: `module tileset hak compilation persistentworld
+override singleplayer multiplayer music sound voices textures models portraits script`. Наш
+случай — `override` (подмена файлов игры: `dialog.tlk` + шрифты):
 ```
 override
-Russian
 ```
-`override` — подмена файлов игры (наш случай: `dialog.tlk` + шрифты); `Russian` — язык
-(тег принимается, проверено на чужом айтеме `2270807144`: `Russian/movies/voices/override`).
-`make_workshop_item.py` пишет `tags.txt` сам (по умолчанию `--tags "override,Russian"`).
-Применить к уже опубликованному айтему: положить `tags.txt` в каталог и повторно
-`WorkshopUpload <путь>`. Если категория не обновилась — проверить на странице айтема «Изменить».
+`make_workshop_item.py` пишет `tags.txt` сам (по умолчанию `--tags "override"`). Применить
+к уже опубликованному айтему: положить `tags.txt` и повторно `WorkshopUpload <путь>` (tags.txt
+— часть контента, обновляется вместе с ним); если не подхватилось — страница айтема «Изменить».
+
+«Russian» в официальный список НЕ входит: чужой айтем `2270807144` указывал его как
+произвольный тег, но это не категория из браузера мастерской. Язык лучше отражать в
+заголовке/описании (у нас уже «[AI] Русскоязычный…»), а не тегом.
 
 ## Эксперимент: repository.json (экран выбора кампаний)
 
