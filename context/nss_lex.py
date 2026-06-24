@@ -134,6 +134,26 @@ def _has_letter(t):
     return any(("a" <= c <= "z") or ("A" <= c <= "Z") for c in t)
 
 
+def _is_codey(t):
+    """True if a SINGLE-token string looks like code, not player text: a Hungarian/
+    camelCase/snake_case identifier, a resref, an ALLCAPS state label, or a function
+    trace ('DLA_Mount('). Multi-word strings (a space) are always treated as text."""
+    s = t.strip()
+    if not s:
+        return True
+    if s.endswith("(") or s.endswith("::"):
+        return True
+    if " " in s or "\t" in s:                       # has a space -> real text
+        return False
+    if re.search(r"[a-z][A-Z]", s):                 # camelCase: nDLAMountState, sHorseTag
+        return True
+    if "_" in s and re.fullmatch(r"[A-Za-z0-9_]+", s):   # snake_case / resref: nw_cloth022
+        return True
+    if re.fullmatch(r"[A-Z][A-Z0-9]{3,}", s):       # ALLCAPS label: INITIALIZE, TRUE
+        return True
+    return False
+
+
 def looks_translatable(t):
     """Natural-language filter for cutscene-var literals: reject tags / identifiers /
     resrefs / ALL_CAPS constants; accept real words & sentences."""
@@ -204,7 +224,7 @@ def build_units(argtoks, src, nl_filter):
     clean_concat = ops <= {"+"} and "+" in ops
 
     def ok(text):
-        if not _has_letter(text) or _DEBUG_STR.match(text):
+        if not _has_letter(text) or _DEBUG_STR.match(text) or _is_codey(text):
             return False
         return looks_translatable(text) if nl_filter else True
 
@@ -231,7 +251,8 @@ def build_units(argtoks, src, nl_filter):
         elif lits and any(_has_letter(x) for x in template if not re.fullmatch(r"\{\d+\}", x)):
             en = "".join(template)
             bare = re.sub(r"\{\d+\}", " ", en)      # natural-language check, placeholders aside
-            if not _DEBUG_STR.match(en) and ((not nl_filter) or looks_translatable(bare)):
+            if not _DEBUG_STR.match(en) and not _is_codey(re.sub(r"\{\d+\}", "", en)) \
+                    and ((not nl_filter) or looks_translatable(bare)):
                 span = (outer(argtoks[0])[0], outer(argtoks[-1])[1])
                 units.append({"kind": "c", "span": span, "codes": codes,
                               "lits": lits, "en": en})
@@ -354,19 +375,38 @@ def extract(src_bytes, slots=None):
     claimed = set()                                 # inner-start offsets already taken
     units = []
 
-    # pass 1: display-function (incl. discovered wrapper) call arguments
+    # pass 1: display-function (incl. discovered wrapper) call arguments.
+    # Also record bare-identifier args sitting in a display slot (a variable spoken
+    # later) so pass 2 can pull its literal assignment.
+    display_vars = set()
     for fn, args, ci in _iter_calls(toks):
         if fn not in slots:
             continue
         for slot in slots[fn]:
             if slot < len(args):
-                for u in build_units(args[slot], s, nl_filter=False):
+                arg = args[slot]
+                if len(arg) == 1 and arg[0][0] == "id":
+                    display_vars.add(arg[0][1])
+                for u in build_units(arg, s, nl_filter=False):
                     starts = [u["start"]] if u["kind"] == "s" else [a for a, b in u["lits"]]
                     for st in starts:
                         claimed.add(st)
                     units.append(u)
 
-    # pass 2: cutscene "string sLine... = <rhs>;" at statement level (depth 0)
+    # vars compared against a literal (VAR == / != ...) must NOT have their assignment
+    # translated, or the comparison would break -> drop them from the dataflow set.
+    compared = set()
+    for k in range(len(toks)):
+        if toks[k][0] == "punct" and toks[k][1] in "=!" and k + 1 < len(toks) \
+                and toks[k + 1] == ("punct", "=", toks[k + 1][2], toks[k + 1][3]):
+            for nb in (k - 1, k + 2):
+                if 0 <= nb < len(toks) and toks[nb][0] == "id":
+                    compared.add(toks[nb][1])
+    flow_vars = display_vars - compared
+
+    # pass 2: literal assignments to (a) a variable spoken via a display slot [dataflow,
+    # any scope] or (b) a cutscene-named "string sLine.. = .." var [name heuristic, top
+    # level]. e.g. const string S_NARRATION_1 = "..."; ... cs_SpeakString(o, S_NARRATION_1)
     depth = 0
     i = 0
     while i < len(toks):
@@ -375,9 +415,13 @@ def extract(src_bytes, slots=None):
             depth += 1; i += 1; continue
         if tk[0] == "punct" and tk[1] in ")]}":
             depth -= 1; i += 1; continue
-        if depth == 0 and tk[0] == "id" and _CUT_VAR.search(tk[1]) and tk[1][0] in "sS" \
-                and i + 1 < len(toks) and toks[i + 1] == ("punct", "=", toks[i + 1][2], toks[i + 1][3]):
-            # collect RHS until top-level ';'
+        is_assign = (tk[0] == "id" and i + 1 < len(toks)
+                     and toks[i + 1] == ("punct", "=", toks[i + 1][2], toks[i + 1][3])
+                     and not (i + 2 < len(toks) and toks[i + 2] == ("punct", "=", toks[i + 2][2], toks[i + 2][3]))
+                     and not (toks[i - 1][0] == "punct" and toks[i - 1][1] in "=!<>"))
+        flow = is_assign and tk[1] in flow_vars
+        named = is_assign and depth == 0 and tk[1][0] in "sS" and bool(_CUT_VAR.search(tk[1]))
+        if flow or named:
             rhs, j, d = [], i + 2, 0
             while j < len(toks):
                 x = toks[j]
@@ -389,7 +433,7 @@ def extract(src_bytes, slots=None):
                     break
                 rhs.append(x); j += 1
             if any(x[0] == "str" and x[2] not in claimed for x in rhs):
-                for u in build_units(rhs, s, nl_filter=True):
+                for u in build_units(rhs, s, nl_filter=not flow):
                     starts = [u["start"]] if u["kind"] == "s" else [a for a, b in u["lits"]]
                     if any(st in claimed for st in starts):
                         continue
