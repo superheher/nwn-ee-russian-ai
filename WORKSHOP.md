@@ -33,7 +33,7 @@ python3 context/make_workshop_item.py --thumbnail "<путь к картинке
 ```
 Затем в игре: открыть консоль клавишей `~` и ввести (путь — БЕЗ кавычек):
 ```
-WorkshopUpload /Users/heh/Downloads/neverwi/nwn_ru_mac/build/workshop/<имя>
+WorkshopUpload /Users/heh/Downloads/neverwi/nwn-ee-russian-ai/build/workshop/<имя>
 ```
 **Ограничения на ИМЯ папки/путь (проверено на macOS 2026-06-23):**
 - **Путь пиши СЫРЫМ, без кавычек/экранирования.** Одинарные/двойные кавычки и `\`-экранирование

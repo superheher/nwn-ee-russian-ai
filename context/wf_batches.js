@@ -8,7 +8,7 @@ export const meta = {
   ],
 }
 
-const PROOT = '/Users/heh/Downloads/neverwi/nwn_ru_mac'
+const PROOT = '/Users/heh/Downloads/neverwi/nwn-ee-russian-ai'
 let A = args
 if (typeof A === 'string') { try { A = JSON.parse(A) } catch (e) { A = {} } }
 A = A || {}

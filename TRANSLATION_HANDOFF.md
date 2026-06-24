@@ -159,11 +159,11 @@ Override до Hobby World только эти (в `hybrid_overrides.tsv`):
 ## Как возобновить
 
 ```bash
-cd ~/Downloads/neverwi/nwn_ru_mac
+cd ~/Downloads/neverwi/nwn-ee-russian-ai
 # пересобрать глоссарий при необходимости:
 python3 glossary/mine_glossary.py backup/english/dialog.tlk payload/patcher/dialog.tlk_RU.txt glossary
 # реконструировать любой разговор:
 python3 context/nwn.py "$HOME/Library/Application Support/Steam/steamapps/common/Neverwinter Nights" Chapter1.nwm <resref>
 ```
 Игра: `~/Library/Application Support/Steam/steamapps/common/Neverwinter Nights`.
-Англ. эталон tlk: `nwn_ru_mac/backup/english/dialog.tlk` (112 228 строк).
+Англ. эталон tlk: `nwn-ee-russian-ai/backup/english/dialog.tlk` (112 228 строк).

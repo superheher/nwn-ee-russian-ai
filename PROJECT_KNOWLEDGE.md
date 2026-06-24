@@ -100,9 +100,17 @@ include'ы с незакрытым `/*` (идиома Bioware) ломают па
 - `patch_repo.py` — пропатчить установочный `repository.json` (экран кампаний), кросс-платформ.
 - `tlk_fix.py` + `tlk_overrides.json` — точечные правки UI-строк в `dialog.tlk`.
 - `validate_dlc.py` — код-валидация переводов (теги/плейсхолдеры/переносы; исключает `<<коммент>>`).
-- Перевод-Workflow — паттерн в `wf_module.js` (батчи + глоссарий + код-валидация + repair).
+- Перевод-Workflow — паттерн в `wf_module.js`/`wf_nss.js` (батчи + глоссарий + код-валидация + repair).
 - Глоссарий — `context/glossary_active.json` (термины FR/D&D, имена). Обязателен в переводе.
 - `tools/nwnsc` — компилятор NSS→NCS (для скрипт-фазы).
+- **Скрипт-фаза:** `nss_lex.py` (лексер + авто-детект display-обёрток), `nss_prep.py`/`nss_apply.py`
+  (извлечь→перевести→перекомпилировать/пропатчить→вписать→деплой), `nss_run.py`+`nss_modules.json`
+  (драйвер по модулям). См. §5.
+- **`ncs.py`** — патчер байткода NCS (строки + релокация прыжков) для нерекомпилируемых скриптов.
+- **`audit_english.py`** — МОДЕЛЬ-НЕЗАВИСИМЫЙ аудит остаточного английского в задеплоенном байткоде
+  (QA-гейт перед релизом); `ncs_worklist.py`/`ncs_patch.py` — перевод+патч найденного аудитом.
+- **`build_all_workshop.py`** + `make_dlc_override.py` + `make_descriptions.py` — сборка 9
+  Workshop-айтемов (база+8 DLC) с описаниями RU+EN. См. `WORKSHOP_ITEMS.md`.
 
 RU-переводы закоммичены: `dlc/*/translated`, `dlc/*_hak/translated`. Англ. исходники +
 derived-бинари (`*.nwm/*.mod/*.hak`, batches, index, override, tools/) — в `.gitignore`.
@@ -194,7 +202,7 @@ Treasure 12, Contest 2; Eremor/ToHeir 0.
 
 ## 7. ПОЙНТЕРЫ (доки + память)
 
-**Доки в `nwn_ru_mac/`:** `PROJECT_KNOWLEDGE.md` (этот), `WORKSHOP_PREMIUM.md` (Workshop/премиум-
+**Доки в `nwn-ee-russian-ai/`:** `PROJECT_KNOWLEDGE.md` (этот), `WORKSHOP_PREMIUM.md` (Workshop/премиум-
 доставка), `SCRIPT_TRANSLATION_PLAN.md` (фаза скриптов — план), `WORKSHOP.md` (заливка айтемов),
 `TRANSLATION_HANDOFF.md` + `README.md` (база). 
 
