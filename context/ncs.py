@@ -107,6 +107,25 @@ def jumps_valid(d):
     return True
 
 
+def compared_strings(d):
+    """Set of string-constant VALUES used as an operand of a STRING EQUAL/NEQUAL
+    (translating them would break game logic). Precise: only EQUAL/NEQUAL with the
+    string-comparison type byte 0x23 (EQUALSS); int compares (0x20) near a string
+    assignment do NOT count. Looks back a few instructions for the string operand."""
+    instrs, ok = parse(d)
+    out = set()
+    if not ok:
+        return out
+    for i, ins in enumerate(instrs):
+        if ins["op"] in (0x0B, 0x0C) and d[ins["o"] + 1] == 0x23:   # string EQUAL/NEQUAL
+            for j in range(max(0, i - 4), i):
+                b = instrs[j]
+                if b["op"] == 0x04 and d[b["o"] + 1] == 0x05:
+                    sl = struct.unpack_from(">H", d, b["o"] + 2)[0]
+                    out.add(d[b["o"] + 4:b["o"] + 4 + sl])
+    return out
+
+
 def strings(d):
     """List of (offset_of_string_bytes, length, bytes) for every CONST-string."""
     out = []
