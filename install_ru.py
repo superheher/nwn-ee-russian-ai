@@ -15,7 +15,7 @@ Safe: backs up the originals before replacing them and keeps a manifest.json;
 Repeatable: can be run again after a Steam update (which restores the English
   dialog.tlk) - the English source is detected automatically.
 """
-import argparse, json, os, shutil, struct, subprocess, sys, copy
+import argparse, json, os, re, shutil, struct, subprocess, sys, copy
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_GAME = os.path.expanduser(
@@ -25,6 +25,51 @@ DEFAULT_PAYLOAD = os.path.join(HERE, "payload")      # extracted russifier (app/
 BACKUP = os.path.join(HERE, "backup")
 MANIFEST = os.path.join(BACKUP, "manifest.json")
 BUILT_TLK = os.path.join(HERE, "build", "dialog.tlk")
+
+
+def _has_game(root):
+    return bool(root) and os.path.exists(os.path.join(root, "lang", "en", "data", "dialog.tlk"))
+
+
+def _steam_library_roots():
+    """NWN install dir under every Steam library (parse libraryfolders.vdf) — handles
+    games moved to a second library / external drive."""
+    out = []
+    for v in ("~/Library/Application Support/Steam/steamapps/libraryfolders.vdf",
+              "~/.steam/steam/steamapps/libraryfolders.vdf",
+              "~/.local/share/Steam/steamapps/libraryfolders.vdf"):
+        v = os.path.expanduser(v)
+        if os.path.exists(v):
+            for path in re.findall(r'"path"\s+"([^"]+)"', open(v, encoding="utf-8", errors="replace").read()):
+                out.append(os.path.join(path.replace("\\\\", "/"), "steamapps", "common", "Neverwinter Nights"))
+    return out
+
+
+def find_game():
+    """Locate the NWN:EE install without --game: Steam (default + every library),
+    common GOG/Beamdog folders, then a macOS Spotlight search (so it also finds GOG
+    installs or a copy on an external drive). Returns the game root or None."""
+    cands = [DEFAULT_GAME] + _steam_library_roots() + [os.path.expanduser(p) for p in (
+        "~/.steam/steam/steamapps/common/Neverwinter Nights",
+        "~/.local/share/Steam/steamapps/common/Neverwinter Nights",
+        "/Applications/Neverwinter Nights Enhanced Edition",
+        "~/Applications/Neverwinter Nights Enhanced Edition",
+        "~/GOG Games/Neverwinter Nights Enhanced Edition",
+        "~/Library/Application Support/GOG.com/Galaxy/Games/Neverwinter Nights Enhanced Edition")]
+    for c in cands:
+        if _has_game(c):
+            return c
+    if sys.platform == "darwin":
+        try:
+            out = subprocess.run(["mdfind", "-name", "dialog.tlk"],
+                                 capture_output=True, text=True, timeout=15).stdout
+            for line in out.splitlines():
+                tail = "/lang/en/data/dialog.tlk"
+                if line.endswith(tail) and _has_game(line[:-len(tail)]):
+                    return line[:-len(tail)]
+        except Exception:
+            pass
+    return None
 
 def log(m): print(m)
 
@@ -153,13 +198,21 @@ def install_repository(cur_path, ru_path, manifest, mode, dry):
 
 # ----------------------------------------------------------------- install ----
 def do_install(args):
-    game = args.game; payload = args.payload; patcher = os.path.join(payload, "patcher")
+    game = args.game or find_game()
+    if not game:
+        sys.exit("ERROR: Neverwinter Nights: EE not found automatically.\n"
+                 "Tried Steam (default + libraries), common GOG/Beamdog folders and Spotlight.\n"
+                 "Point at the game folder explicitly, e.g.:\n"
+                 '  python3 install_ru.py --game "/path/to/Neverwinter Nights"')
+    payload = args.payload; patcher = os.path.join(payload, "patcher")
     user = None if args.no_user_dir else args.userdir
     dry = args.dry_run
 
     live_tlk = os.path.join(game, "lang/en/data/dialog.tlk")
     if not os.path.exists(live_tlk):
-        sys.exit(f"ERROR: not found {live_tlk}\nPass the game path via --game.")
+        sys.exit(f"ERROR: not a valid game folder (no {live_tlk}).\nCheck the --game path.")
+    if not args.game:
+        log(f"found game: {game}")
     if not os.path.isdir(patcher):
         sys.exit(f"ERROR: payload/patcher directory not found: {patcher}")
 
@@ -257,7 +310,8 @@ def do_uninstall(args):
 # -------------------------------------------------------------------- main ----
 def main():
     ap = argparse.ArgumentParser(description="Install the NWN:EE russifier (macOS)")
-    ap.add_argument("--game", default=DEFAULT_GAME)
+    ap.add_argument("--game", default=None,
+                    help="game folder; auto-detected if omitted (Steam libraries / GOG / Spotlight)")
     ap.add_argument("--payload", default=DEFAULT_PAYLOAD)
     ap.add_argument("--userdir", default=DEFAULT_USERDIR)
     ap.add_argument("--variant", choices=["main", "zog"], default="main")

@@ -20,7 +20,9 @@ python3 install_ru.py              # установить
 python3 install_ru.py --uninstall  # откатить
 ```
 
-После установки перезапустите игру. Опции — `python3 install_ru.py --help`.
+Скрипт сам находит игру (Steam, в т.ч. в других библиотеках; GOG; на macOS — через Spotlight).
+Если не нашёл — укажите папку явно: `--game "/путь/к/Neverwinter Nights"`. После установки
+перезапустите игру; прочие опции — `python3 install_ru.py --help`.
 
 ## Что переведено
 
