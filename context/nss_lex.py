@@ -268,7 +268,24 @@ _KEYWORDS = {"if", "while", "for", "switch", "return", "do", "else"}
 # wrapper functions whose name marks them as developer/debug output (their string
 # arg is a debug message, NOT player-facing) -> never treated as a display slot.
 _DEBUG_FN = re.compile(r"(?i)(debug|dbg|log|trace|dump|assert|spam|verbose|"
-                       r"console|report|printc|wrlog|_pr\b|monitor|\btest)")
+                       r"console|report|print|wrlog|_pr\b|monitor|\btest)")
+
+# functions whose string arguments are tags / resrefs / variable keys / nested
+# actions — never display text. Used to gate the data-driven wrapper pass.
+_NONDISPLAY = {
+    "SetLocalString", "GetLocalString", "SetLocalInt", "SetLocalObject",
+    "SetLocalFloat", "SetLocalLocation", "SetCampaignString", "GetCampaignString",
+    "SetCampaignInt", "GetCampaignInt", "SetLocalGff",
+    "AssignCommand", "DelayCommand", "ActionDoCommand", "ActionWait",
+    "GetObjectByTag", "GetNearestObjectByTag", "GetWaypointByTag",
+    "GetObjectByTagInArea", "GetNearestObjectByTagInArea", "CreateObject",
+    "CreateItemOnObject", "CreateTrapAtLocation", "ActionStartConversation",
+    "SpeakOneLinerConversation", "ExecuteScript", "ExecuteScriptChunk",
+    "Get2DAString", "StringToObject", "TestStringAgainstPattern", "GetTag",
+    "GetItemPossessedBy", "CutsceneAddActor", "CutsceneGetActor", "CutscenePlay",
+    "CutsceneStart", "CutsceneMoveTo", "CutsceneForceMoveTo", "CutsceneSpawnActor",
+    "CutSetActiveCutsceneForObject", "FindSubString", "GetStringLength",
+}
 
 
 def _parse_paren(toks, op):
@@ -353,11 +370,69 @@ def discover_display_slots(sources):
                 continue
             for fn, args, _ in _iter_calls(body):
                 for slot in slots.get(fn, ()):
-                    if slot < len(args) and len(args[slot]) == 1 and args[slot][0][0] == "id" \
-                            and args[slot][0][1] in pnames:
-                        pos = pnames.index(args[slot][0][1])
-                        if pos not in slots.get(name, set()):
-                            slots.setdefault(name, set()).add(pos); changed = True
+                    if slot >= len(args):
+                        continue
+                    # the param may be forwarded directly (SpeakString(s)) or as a concat
+                    # operand (SpeakString("[" + GetName(o) + "] " + s)) — check each piece
+                    for pc in _split_top_level(args[slot], "+"):
+                        if len(pc) == 1 and pc[0][0] == "id" and pc[0][1] in pnames:
+                            pos = pnames.index(pc[0][1])
+                            if pos not in slots.get(name, set()):
+                                slots.setdefault(name, set()).add(pos); changed = True
+
+    # data-driven pass: display WRAPPERS whose body lives in an unshipped include
+    # (only a prototype is visible, so the dataflow above can't see them) — e.g.
+    # SceneSpeak, CutSpeakString. Signal: an UNDEFINED function called with >=2
+    # display-looking string literals at the same arg position. Excludes logic
+    # storage (SetLocalString...) and debug. Per-literal safety still applies at
+    # extraction (a tag literal at that slot is rejected by _is_codey).
+    # colour-wrapper formatters: a function that returns its string param wrapped in
+    # NWN colour codes, e.g. string MakeTextRed(string s){ return "<c..>"+s+"</c>"; }.
+    # Its result flows (often via a var) into a display function -> the param is
+    # display-bound. Detected by a return concat with both a param operand AND a
+    # colour-markup string literal operand.
+    for nm, pn, bd in defs:
+        if _DEBUG_FN.search(nm):
+            continue
+        for i, t in enumerate(bd):
+            if t[0] == "id" and t[1] == "return":
+                expr, j, d = [], i + 1, 0
+                while j < len(bd):
+                    x = bd[j]
+                    if x[0] == "punct" and x[1] in "([":
+                        d += 1
+                    elif x[0] == "punct" and x[1] in ")]":
+                        d -= 1
+                    elif x[0] == "punct" and x[1] == ";" and d == 0:
+                        break
+                    expr.append(x); j += 1
+                pieces = _split_top_level(expr, "+")
+                has_colour = any(len(pc) == 1 and pc[0][0] == "str"
+                                 and ("<c" in pc[0][1] or "</c>" in pc[0][1]) for pc in pieces)
+                if has_colour:
+                    for pc in pieces:
+                        if len(pc) == 1 and pc[0][0] == "id" and pc[0][1] in pn:
+                            slots.setdefault(nm, set()).add(pn.index(pc[0][1]))
+
+    def _disp_lit(txt):
+        return (" " in txt and len(txt) > 10 and any("a" <= c <= "z" for c in txt)
+                and not _is_codey(txt) and not _DEBUG_STR.match(txt))
+
+    defnames = {d[0] for d in defs}
+    cand = {}                                       # (fn, argpos) -> [display_count, total_literals]
+    for data in sources.values():
+        for fn, args, _ in _iter_calls(tokenize(data)):
+            if fn in slots or fn in defnames or fn in _NONDISPLAY or _DEBUG_FN.search(fn):
+                continue
+            for ai, a in enumerate(args):
+                lits = [t[1] for t in a if t[0] == "str" and t[1].strip()]
+                if not lits:
+                    continue
+                rec = cand.setdefault((fn, ai), [0, 0])
+                rec[0] += sum(1 for x in lits if _disp_lit(x)); rec[1] += len(lits)
+    for (fn, ai), (disp, tot) in cand.items():      # add only if literals are MOSTLY display
+        if disp >= 2 and disp >= 0.6 * tot:
+            slots.setdefault(fn, set()).add(ai)
     return slots
 
 
