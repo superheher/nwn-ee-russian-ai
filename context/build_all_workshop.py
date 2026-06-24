@@ -156,6 +156,7 @@ def main():
     sz = sum(os.path.getsize(os.path.join(r, f)) for r, _, fs in os.walk(base) for f in fs)
     print(f"AI Russian Text Translation\n   dialog.tlk + fonts + "
           f"development/ {sum(per.values())} bonus res; item {sz/1e6:.1f} MB")
+    import make_descriptions; make_descriptions.main()
     print(f"\nAll items in {args.out}\n  upload each in-game: WorkshopUpload <raw path, no quotes>")
 
 

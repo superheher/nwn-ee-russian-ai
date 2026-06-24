@@ -21,6 +21,17 @@ WorkshopUpload /Users/heh/Downloads/neverwi/nwn_ru_mac/build/workshop/AI Russian
 совпадение имени папки с заголовком обновит его; иначе создаст новый. Заголовок/описание/
 видимость — на странице работы.
 
+## Описания (RU + EN)
+В каждой папке айтема лежат `description_ru.txt` и `description_en.txt` (сплошные строки, без
+переносов). Генератор — `context/make_descriptions.py` (вызывается из `build_all_workshop.py`).
+
+**Авто-заливка описания — НЕЛЬЗЯ через штатный загрузчик.** Официально (Beamdog/Steam) `WorkshopUpload`
+читает из папки ТОЛЬКО `thumbnail.png`/`.jpg`; заголовок и описание вводятся ВРУЧНУЮ на странице работы
+в Steam после заливки. То есть `description_*.txt` — для копипаста на страницу. Единственный
+потенциальный авто-путь — `steamcmd +workshop_build_item <vdf>` (поля `title`/`description`/`previewfile`/
+`publishedfileid`/`contentfolder`), но это НЕ проверено на NWN (704450 — кастомный загрузчик Beamdog),
+сложнее и требует логина steamcmd. Надёжно — `WorkshopUpload` + вставить описание руками.
+
 ## Айтем → флаг required-DLC (ставишь на странице каждой работы)
 | Айтем | Требует DLC |
 |---|---|
