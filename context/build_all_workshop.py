@@ -40,31 +40,31 @@ def P(*a):
 
 # item title -> (thumbnail, [(ru_archive, orig_archive), ...])
 DLC = {
-    "Darkness over Daggerford - Russian AI Translation": (
+    "AI Russian Text Darkness over Daggerford": (
         "Darkness over Daggerford.png",
         [("dlc/daggerford/daggerford_ru_scr.nwm", f"{MNT}/nwm/Neverwinter Nights - Darkness over Daggerford.nwm.orig")]),
-    "Doom of Icewind Dale - Russian AI Translation": (
+    "AI Russian Text Doom of Icewind Dale": (
         "Doom of Icewind Dale.png",
         [("dlc/doid/doid_ru_scr.nwm", f"{MNT}/nwm/Neverwinter Nights - Doom of Icewind Dale.nwm.orig")]),
-    "Tyrants of the Moonsea - Russian AI Translation": (
+    "AI Russian Text Tyrants of the Moonsea": (
         "Tyrants of the Moonsea.png",
         [("dlc/moonsea/moonsea_ru_scr.nwm", f"{MNT}/nwm/Neverwinter Nights - Tyrants of the Moonsea.nwm.orig")]),
-    "Dark Dreams of Furiae - Russian AI Translation": (
+    "AI Russian Text Dark Dreams of Furiae": (
         "Dark Dreams of Furiae.png",
         [("ddf/DDF_ru_scr.nwm", f"{MNT}/nwm/Neverwinter Nights - Dark Dreams of Furiae.nwm.orig")]),
-    "Pirates of the Sword Coast - Russian AI Translation": (
+    "AI Russian Text Pirates of the Sword Coast": (
         "Pirates of the Sword Coast.png",
         [("dlc/pirates/pirates_ru_scr.nwm", f"{MNT}/nwm/Neverwinter Nights - Pirates of the Sword Coast.nwm.orig"),
          ("dlc/pirates_hak/pirates_hak_ru.hak", f"{MNT}/hk/potsc_top.hak.orig")]),
-    "Infinite Dungeons - Russian AI Translation": (
+    "AI Russian Text Infinite Dungeons": (
         "Infinite Dungeons.png",
         [("dlc/dungeons/dungeons_ru_scr.nwm", f"{MNT}/nwm/Neverwinter Nights - Infinite Dungeons.nwm.orig"),
          ("dlc/dungeons_hak/dungeons_hak_ru.hak", f"{MNT}/hk/id_resources.hak.orig")]),
-    "Wyvern Crown of Cormyr - Russian AI Translation": (
+    "AI Russian Text Wyvern Crown of Cormyr": (
         "Wyvern Crown of Cormyr.png",
         [("dlc/cormyr/cormyr_ru_scr.nwm", f"{MNT}/nwm/Neverwinter Nights - Wyvern Crown of Cormyr.nwm.orig"),
          ("dlc/cormyr_hak/cormyr_hak_ru.hak", f"{MNT}/hk/wc_top.hak.orig")]),
-    "Heroes of Neverwinter - Russian AI Translation": (              # Kingmaker pack
+    "AI Russian Text Heroes of Neverwinter": (              # Kingmaker pack
         "Kingmaker (Heroes of Neverwinter).png",
         [("dlc/kingmaker/kingmaker_ru_scr.mod", f"{MNT}/mod/Kingmaker.mod.orig"),
          ("dlc/kingmaker_hak/kingmaker_hak_ru.hak", f"{MNT}/hk/km_resources.hak.orig"),
@@ -146,7 +146,7 @@ def main():
         print(f"{title}\n   development/: {sum(per.values())} res ({dict(per)}); item {sz/1e6:.1f} MB")
 
     # base item: dialog.tlk (override/+ovr/) + fonts + bonus modules in development/
-    base = os.path.join(args.out, "Neverwinter Nights EE - Russian AI Translation")
+    base = os.path.join(args.out, "AI Russian Text Translation")
     copy_fonts(base)
     for d in ("override", "ovr"):
         shutil.copy2(TLK, os.path.join(base, d, "dialog.tlk"))
@@ -154,7 +154,7 @@ def main():
     per = extract_into(dev, BONUS)
     thumb(base, BASE_THUMB); tags(base)
     sz = sum(os.path.getsize(os.path.join(r, f)) for r, _, fs in os.walk(base) for f in fs)
-    print(f"Neverwinter Nights EE - Russian AI Translation\n   dialog.tlk + fonts + "
+    print(f"AI Russian Text Translation\n   dialog.tlk + fonts + "
           f"development/ {sum(per.values())} bonus res; item {sz/1e6:.1f} MB")
     print(f"\nAll items in {args.out}\n  upload each in-game: WorkshopUpload <raw path, no quotes>")
 

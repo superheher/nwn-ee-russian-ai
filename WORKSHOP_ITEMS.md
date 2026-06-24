@@ -15,7 +15,7 @@
 ## Заливка (в игре, консоль `~`)
 Путь СЫРОЙ, без кавычек (пробелы — ОК, скобки/кириллица в пути — НЕЛЬЗЯ; у нас латиница):
 ```
-WorkshopUpload /Users/heh/Downloads/neverwi/nwn_ru_mac/build/workshop/Wyvern Crown of Cormyr - Russian AI Translation
+WorkshopUpload /Users/heh/Downloads/neverwi/nwn_ru_mac/build/workshop/AI Russian Text Wyvern Crown of Cormyr
 ```
 Имя папки = заголовок айтема. Если айтем уже есть (база `3750140362`, Furiae `3750222088`) —
 совпадение имени папки с заголовком обновит его; иначе создаст новый. Заголовок/описание/
@@ -24,15 +24,15 @@ WorkshopUpload /Users/heh/Downloads/neverwi/nwn_ru_mac/build/workshop/Wyvern Cro
 ## Айтем → флаг required-DLC (ставишь на странице каждой работы)
 | Айтем | Требует DLC |
 |---|---|
-| Neverwinter Nights EE - Russian AI Translation | — (база, бесплатно) |
-| Darkness over Daggerford - Russian AI Translation | Darkness over Daggerford |
-| Doom of Icewind Dale - Russian AI Translation | Doom of Icewind Dale |
-| Tyrants of the Moonsea - Russian AI Translation | Tyrants of the Moonsea |
-| Dark Dreams of Furiae - Russian AI Translation | Dark Dreams of Furiae |
-| Pirates of the Sword Coast - Russian AI Translation | Pirates of the Sword Coast |
-| Infinite Dungeons - Russian AI Translation | Infinite Dungeons |
-| Wyvern Crown of Cormyr - Russian AI Translation | Wyvern Crown of Cormyr |
-| Heroes of Neverwinter - Russian AI Translation | Kingmaker |
+| AI Russian Text Translation | — (база, бесплатно) |
+| AI Russian Text Darkness over Daggerford | Darkness over Daggerford |
+| AI Russian Text Doom of Icewind Dale | Doom of Icewind Dale |
+| AI Russian Text Tyrants of the Moonsea | Tyrants of the Moonsea |
+| AI Russian Text Dark Dreams of Furiae | Dark Dreams of Furiae |
+| AI Russian Text Pirates of the Sword Coast | Pirates of the Sword Coast |
+| AI Russian Text Infinite Dungeons | Infinite Dungeons |
+| AI Russian Text Wyvern Crown of Cormyr | Wyvern Crown of Cormyr |
+| AI Russian Text Heroes of Neverwinter | Kingmaker |
 
 required-DLC = Steam отдаёт айтем ТОЛЬКО владельцам нужной DLC → контент за пейволом, раздача
 легитимна.
