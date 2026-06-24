@@ -31,7 +31,7 @@ Steps:
 import os, sys, re, json, glob, shutil, subprocess, argparse
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-import erf, nss_lex
+import erf, nss_lex, ncs
 
 NSS, NCS = 2009, 2010
 INSTALL = os.path.expanduser(
@@ -193,6 +193,19 @@ def main():
     if failed:
         print("  ! failed scripts keep their stock (English) NCS - not injected")
 
+    # piece map (english bytes -> russian bytes) for direct NCS byte-patching of
+    # scripts that could NOT be recompiled (e.g. #include an unshipped hf_in_* lib).
+    pmap = {}
+    for i, e in id2en.items():
+        if i not in ru:
+            continue
+        eps = PLACEHOLDER.split(e); rps = PLACEHOLDER.split(ru[i])
+        if len(eps) != len(rps):
+            continue
+        for ep, rp in zip(eps, rps):
+            if ep.strip() and ep != rp:
+                pmap[ep.encode("latin-1", "replace")] = rp.encode("cp1251", "replace")
+
     # ---- 4: inject NCS into the _ru target(s) + optional deploy ---------------
     targets = []
     for m in args.map:
@@ -205,19 +218,25 @@ def main():
         # resrefs that came from this archive and were successfully compiled
         want = {rr: produced[rr] for rr in produced
                 if archives.get(rr, "").lower() == src_arch.lower()}
-        if not want:
-            print(f"[{src_arch}] no compiled scripts from this archive; skipping")
-            continue
+        arch_set = {rr for rr in archives if archives[rr].lower() == src_arch.lower()}
         e = erf.read_erf(open(ru_file, "rb").read())
-        n = 0
+        n = npatch = npstr = 0
         for res in e["resources"]:
-            if res["restype"] == NCS and res["resref"].lower() in want:
-                res["data"] = open(want[res["resref"].lower()], "rb").read(); n += 1
+            if res["restype"] != NCS:
+                continue
+            rr = res["resref"].lower()
+            if rr in want:                          # recompiled (proven) NCS wins
+                res["data"] = open(want[rr], "rb").read(); n += 1
+            elif rr in arch_set:                    # couldn't recompile -> byte-patch stock NCS
+                new, k = ncs.patch_strings(res["data"], pmap)
+                if new is not None and k:
+                    res["data"] = new; npatch += 1; npstr += k
         stem, ext = os.path.splitext(ru_file)
         out = stem + "_scr" + ext
         open(out, "wb").write(erf.write_erf(e))
         erf.read_erf(open(out, "rb").read())        # verify re-read
-        print(f"[{src_arch}] injected {n} NCS -> {out} ({os.path.getsize(out):,} b); re-read OK")
+        print(f"[{src_arch}] injected {n} recompiled NCS + byte-patched {npatch} ({npstr} strings) "
+              f"-> {os.path.relpath(out, HERE)} ({os.path.getsize(out):,} b); re-read OK")
         if args.deploy and deploy:
             if not os.path.exists(deploy):
                 print(f"  ! mount target missing: {deploy}"); continue
