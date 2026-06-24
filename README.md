@@ -1,4 +1,8 @@
-# NWN:EE — русский AI-перевод (база + все премиум-DLC)
+<p align="center">
+  <img src="assets/cover.png" width="380" alt="NWN:EE — русский AI-перевод">
+</p>
+
+# NWN:EE — русский AI-перевод
 
 Русский перевод всего текста Neverwinter Nights: Enhanced Edition — основной игры, официальных
 кампаний и всех 8 платных премиум-DLC. Только текст, озвучка остаётся английской. Работает на
@@ -6,14 +10,9 @@ Windows, Linux и macOS, в Steam и в GOG.
 
 ## Как поставить
 
-### Через Steam — проще всего
+### Через Steam
 
-Подпишитесь на нужные айтемы в Мастерской Steam, и перевод подгрузится сам при следующем запуске
-(шрифты уже включены):
-
-- Основная игра и официальные кампании (бесплатно) — **«AI Russian Text Translation»**.
-- Каждое платное DLC — отдельный айтем **«AI Russian Text \<название DLC\>»** (набор Kingmaker —
-  «AI Russian Text Heroes of Neverwinter»). Steam покажет айтем только владельцу этой DLC.
+Подпишитесь на айтемы **«AI Russian Text …»** в Мастерской Steam — перевод подгрузится сам.
 
 ### Без Steam (GOG и другие) — Windows, Linux, macOS
 
