@@ -18,7 +18,7 @@ import struct as _s
 
 
 def read_erf(data):
-    assert data[:4] == b"MOD ", data[:8]
+    assert data[:4] in (b"MOD ", b"HAK ", b"ERF ", b"SAV "), data[:8]
     lang_count, locstr_size, n, off_locstr, off_keys, off_res = _s.unpack_from("<6I", data, 8)
     ko, ro = off_keys, off_res
     resources = []
