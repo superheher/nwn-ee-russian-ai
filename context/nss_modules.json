@@ -1,0 +1,17 @@
+{
+  "cormyr":      {"src": "/Volumes/twitch/nwn/data/nwm/Neverwinter Nights - Wyvern Crown of Cormyr.nwm.orig",   "ru": "dlc/cormyr/cormyr_ru.nwm",          "deploy": "/Volumes/twitch/nwn/data/nwm/Neverwinter Nights - Wyvern Crown of Cormyr.nwm"},
+  "daggerford":  {"src": "/Volumes/twitch/nwn/data/nwm/Neverwinter Nights - Darkness over Daggerford.nwm.orig", "ru": "dlc/daggerford/daggerford_ru.nwm",   "deploy": "/Volumes/twitch/nwn/data/nwm/Neverwinter Nights - Darkness over Daggerford.nwm"},
+  "moonsea":     {"src": "/Volumes/twitch/nwn/data/nwm/Neverwinter Nights - Tyrants of the Moonsea.nwm.orig",   "ru": "dlc/moonsea/moonsea_ru.nwm",        "deploy": "/Volumes/twitch/nwn/data/nwm/Neverwinter Nights - Tyrants of the Moonsea.nwm"},
+  "doid":        {"src": "/Volumes/twitch/nwn/data/nwm/Neverwinter Nights - Doom of Icewind Dale.nwm.orig",     "ru": "dlc/doid/doid_ru.nwm",              "deploy": "/Volumes/twitch/nwn/data/nwm/Neverwinter Nights - Doom of Icewind Dale.nwm"},
+  "furiae":      {"src": "/Volumes/twitch/nwn/data/nwm/Neverwinter Nights - Dark Dreams of Furiae.nwm.orig",    "ru": "ddf/DDF_ru.nwm",                    "deploy": "/Volumes/twitch/nwn/data/nwm/Neverwinter Nights - Dark Dreams of Furiae.nwm"},
+  "pirates":     {"src": "/Volumes/twitch/nwn/data/nwm/Neverwinter Nights - Pirates of the Sword Coast.nwm.orig","ru": "dlc/pirates/pirates_ru.nwm",       "deploy": "/Volumes/twitch/nwn/data/nwm/Neverwinter Nights - Pirates of the Sword Coast.nwm"},
+  "dungeons":    {"src": "/Volumes/twitch/nwn/data/nwm/Neverwinter Nights - Infinite Dungeons.nwm.orig",        "ru": "dlc/dungeons/dungeons_ru.nwm",      "deploy": "/Volumes/twitch/nwn/data/nwm/Neverwinter Nights - Infinite Dungeons.nwm"},
+  "kingmaker":   {"src": "/Volumes/twitch/nwn/data/mod/Kingmaker.mod.orig",                                     "ru": "dlc/kingmaker/kingmaker_ru.mod",    "deploy": "/Volumes/twitch/nwn/data/mod/Kingmaker.mod"},
+  "shadowguard": {"src": "/Volumes/twitch/nwn/data/mod/ShadowGuard.mod.orig",                                   "ru": "dlc/shadowguard/shadowguard_ru.mod","deploy": "/Volumes/twitch/nwn/data/mod/ShadowGuard.mod"},
+  "witchswake":  {"src": "/Volumes/twitch/nwn/data/mod/Witch's Wake.mod.orig",                                  "ru": "dlc/witchswake/witchswake_ru.mod",  "deploy": "/Volumes/twitch/nwn/data/mod/Witch's Wake.mod"},
+  "chess":       {"src": "/Volumes/twitch/nwn/data/mod/Neverwinter Chess.mod.orig",                             "ru": "dlc/chess/chess_ru.mod",            "deploy": "/Volumes/twitch/nwn/data/mod/Neverwinter Chess.mod"},
+  "contest":     {"src": "/Volumes/twitch/nwn/data/mod/Contest Of Champions 0492.mod.orig",                     "ru": "dlc/contest/contest_ru.mod",        "deploy": "/Volumes/twitch/nwn/data/mod/Contest Of Champions 0492.mod"},
+  "treasure":    {"src": "/Volumes/twitch/nwn/data/mod/The Dark Ranger's Treasure.mod.orig",                    "ru": "dlc/treasure/treasure_ru.mod",      "deploy": "/Volumes/twitch/nwn/data/mod/The Dark Ranger's Treasure.mod"},
+  "eremor":      {"src": "/Volumes/twitch/nwn/data/mod/The Winds of Eremor.mod.orig",                           "ru": "dlc/eremor/eremor_ru.mod",          "deploy": "/Volumes/twitch/nwn/data/mod/The Winds of Eremor.mod"},
+  "toheir":      {"src": "/Volumes/twitch/nwn/data/mod/To Heir is Human.mod.orig",                              "ru": "dlc/toheir/toheir_ru.mod",          "deploy": "/Volumes/twitch/nwn/data/mod/To Heir is Human.mod"}
+}

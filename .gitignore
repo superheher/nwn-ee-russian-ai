@@ -58,3 +58,4 @@ dlc/*/override/
 
 # macOS
 .DS_Store
+tools/
