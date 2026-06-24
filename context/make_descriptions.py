@@ -48,14 +48,21 @@ f"Russian AI text translation for the \"{name}\" expansion (Neverwinter Nights: 
 "Translates all in-game text: dialogue, journal and quest entries, item, creature and area names and descriptions, cutscene lines, floating messages and combat feedback. Translated with context, Forgotten Realms terminology and each character's voice in mind.\n\n"
 "This translation is unofficial and based on the original Beamdog/BioWare content.")
 
+# the base-game item's RU+EN description is HAND-CURATED on the published Steam item
+# (user maintains it manually) — the generator must NOT touch it.
+SKIP = {"AI Russian Text Translation"}
+
+
 def main():
+    n = 0
     for folder, (name, req, note_ru, note_en) in ITEMS.items():
         d = os.path.join(WS, folder)
-        if not os.path.isdir(d):
+        if folder in SKIP or not os.path.isdir(d):
             continue
         open(os.path.join(d, "description_ru.txt"), "w", encoding="utf-8").write(ru(name, req, note_ru) + "\n")
         open(os.path.join(d, "description_en.txt"), "w", encoding="utf-8").write(en(name, req, note_en) + "\n")
-    print(f"  wrote RU+EN descriptions into {len(ITEMS)} item folders")
+        n += 1
+    print(f"  wrote RU+EN descriptions into {n} DLC item folders (base item skipped — hand-curated)")
 
 
 if __name__ == "__main__":
