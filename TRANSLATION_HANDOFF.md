@@ -159,7 +159,7 @@ Override до Hobby World только эти (в `hybrid_overrides.tsv`):
 ## Как возобновить
 
 ```bash
-cd ~/Downloads/neverwi/nwn-ee-russian-ai
+cd ~/games/neverwinter-russian/nwn-ee-russian-ai
 # пересобрать глоссарий при необходимости:
 python3 glossary/mine_glossary.py backup/english/dialog.tlk payload/patcher/dialog.tlk_RU.txt glossary
 # реконструировать любой разговор:

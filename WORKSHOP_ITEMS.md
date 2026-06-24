@@ -15,7 +15,7 @@
 ## Заливка (в игре, консоль `~`)
 Путь СЫРОЙ, без кавычек (пробелы — ОК, скобки/кириллица в пути — НЕЛЬЗЯ; у нас латиница):
 ```
-WorkshopUpload /Users/heh/Downloads/neverwi/nwn-ee-russian-ai/build/workshop/AI Russian Text Wyvern Crown of Cormyr
+WorkshopUpload /Users/heh/games/neverwinter-russian/nwn-ee-russian-ai/build/workshop/AI Russian Text Wyvern Crown of Cormyr
 ```
 Имя папки = заголовок айтема. Если айтем уже есть (база `3750140362`, Furiae `3750222088`) —
 совпадение имени папки с заголовком обновит его; иначе создаст новый. Заголовок/описание/

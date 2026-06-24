@@ -4,7 +4,7 @@ export const meta = {
   phases: [ { title: 'Load' }, { title: 'Translate' }, { title: 'Repair' } ],
 }
 
-const PROOT = '/Users/heh/Downloads/neverwi/nwn-ee-russian-ai'
+const PROOT = '/Users/heh/games/neverwinter-russian/nwn-ee-russian-ai'
 let A = args
 if (typeof A === 'string') { try { A = JSON.parse(A) } catch (e) { A = {} } }
 A = A || {}
