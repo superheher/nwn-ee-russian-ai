@@ -20,7 +20,9 @@ import argparse, json, os, re, shutil, struct, subprocess, sys, copy
 HERE = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_GAME = os.path.expanduser(
     "~/Library/Application Support/Steam/steamapps/common/Neverwinter Nights")
-DEFAULT_USERDIR = os.path.expanduser("~/Documents/Neverwinter Nights")
+DEFAULT_USERDIR = os.path.expanduser(                # NWN user dir differs per OS
+    "~/.local/share/Neverwinter Nights" if sys.platform.startswith("linux")
+    else "~/Documents/Neverwinter Nights")           # macOS + Windows
 DEFAULT_PAYLOAD = os.path.join(HERE, "payload")      # extracted russifier (app/)
 BACKUP = os.path.join(HERE, "backup")
 MANIFEST = os.path.join(BACKUP, "manifest.json")
@@ -50,21 +52,26 @@ def find_game():
     common GOG/Beamdog folders, then a macOS Spotlight search (so it also finds GOG
     installs or a copy on an external drive). Returns the game root or None."""
     cands = [DEFAULT_GAME] + _steam_library_roots() + [os.path.expanduser(p) for p in (
-        "~/.steam/steam/steamapps/common/Neverwinter Nights",
+        "~/.steam/steam/steamapps/common/Neverwinter Nights",          # Linux Steam
         "~/.local/share/Steam/steamapps/common/Neverwinter Nights",
-        "/Applications/Neverwinter Nights Enhanced Edition",
+        "~/.var/app/com.valvesoftware.Steam/.local/share/Steam/steamapps/common/Neverwinter Nights",
+        "/Applications/Neverwinter Nights Enhanced Edition",           # macOS GOG/Beamdog
         "~/Applications/Neverwinter Nights Enhanced Edition",
-        "~/GOG Games/Neverwinter Nights Enhanced Edition",
-        "~/Library/Application Support/GOG.com/Galaxy/Games/Neverwinter Nights Enhanced Edition")]
+        "~/Library/Application Support/GOG.com/Galaxy/Games/Neverwinter Nights Enhanced Edition",
+        "~/GOG Games/Neverwinter Nights Enhanced Edition",             # Linux/Win GOG
+        "~/GOG Games/Neverwinter Nights Enhanced Edition/game")] + [
+        "C:/Program Files (x86)/Steam/steamapps/common/Neverwinter Nights",   # Windows
+        "C:/Program Files/Steam/steamapps/common/Neverwinter Nights",
+        "C:/GOG Games/Neverwinter Nights Enhanced Edition",
+        "C:/Program Files (x86)/GOG Galaxy/Games/Neverwinter Nights Enhanced Edition"]
     for c in cands:
         if _has_game(c):
             return c
-    if sys.platform == "darwin":
+    tail = "/lang/en/data/dialog.tlk"               # index search: Spotlight / locate
+    for cmd in (["mdfind", "-name", "dialog.tlk"], ["locate", "-e", "dialog.tlk"], ["locate", "dialog.tlk"]):
         try:
-            out = subprocess.run(["mdfind", "-name", "dialog.tlk"],
-                                 capture_output=True, text=True, timeout=15).stdout
+            out = subprocess.run(cmd, capture_output=True, text=True, timeout=15).stdout
             for line in out.splitlines():
-                tail = "/lang/en/data/dialog.tlk"
                 if line.endswith(tail) and _has_game(line[:-len(tail)]):
                     return line[:-len(tail)]
         except Exception:
