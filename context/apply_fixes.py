@@ -12,7 +12,10 @@ text must be CP1251-encodable, a full-line replacement must stay close to the
 original, and a name form must really be there. Anything that fails is reported
 and skipped.
 
-  apply_fixes.py --decisions DIR [--manual FILE] [--dry-run] [--report PATH]
+  apply_fixes.py --decisions DIR [--manual FILE] [--expand] [--dry-run] [--report PATH]
+
+--expand also applies a name's form map to lines the review's dossier could not
+list (they were capped), i.e. every string whose English mentions that name.
 """
 import os, re, sys, json, glob, argparse, difflib, collections
 
@@ -43,12 +46,13 @@ def validate(old, new, source, full_line):
     tail_old = old[len(old.rstrip()):]
     if tail_old and not new.endswith(tail_old):
         new = new.rstrip() + tail_old
-    if full_line and difflib.SequenceMatcher(None, old, new).ratio() < MIN_SIMILARITY:
+    if (full_line and len(old) >= 60
+            and difflib.SequenceMatcher(None, old, new, autojunk=False).ratio() < MIN_SIMILARITY):
         return None, "rewrites the line instead of fixing it"
     return new, None
 
 
-def load_decisions(ddir):
+def load_decisions(ddir, expand=False):
     """-> (full_line changes, name form changes, rejections)"""
     full, names = [], []
     reject_strrefs, reject_forms = set(), set()
@@ -70,11 +74,16 @@ def load_decisions(ddir):
         for d in json.load(open(p, encoding="utf-8")).get("decisions", []):
             if d.get("verdict") != "fix" or not d.get("form_map"):
                 continue
-            fmap = [(f["from"], f["to"]) for f in d["form_map"]
-                    if f.get("from") and f.get("to")]
+            fmap = sorted([(f["from"], f["to"]) for f in d["form_map"]
+                           if f.get("from") and f.get("to")],
+                          key=lambda ft: -len(ft[0]))       # longest first
             for sr in d.get("strrefs", []):
                 names.append({"strref": int(sr), "en": d["en"], "map": fmap,
                               "source": os.path.basename(p), "why": d.get("note", "")})
+            if expand:
+                names.append({"strref": None, "en": d["en"], "map": fmap,
+                              "expand": True, "source": os.path.basename(p),
+                              "why": "beyond the dossier"})
             if d.get("change_tag") and d.get("canon_ru"):
                 names.append({"strref": int(d["tag_strref"]) if d.get("tag_strref") else None,
                               "en": d["en"], "map": fmap, "tag": d["canon_ru"],
@@ -109,13 +118,14 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--decisions", required=True)
     ap.add_argument("--manual")
+    ap.add_argument("--expand", action="store_true")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--report", default=os.path.join(tlkutil.HERE, "fix_report.json"))
     a = ap.parse_args()
 
     en, ru, ref = tlkutil.load_all()
     owner = tlkutil.strref_owner()
-    full, names, rej_sr, rej_forms = load_decisions(a.decisions)
+    full, names, rej_sr, rej_forms = load_decisions(a.decisions, a.expand)
     if a.manual:
         for sr, new in json.load(open(a.manual, encoding="utf-8")).items():
             full.append({"strref": int(sr), "new": new, "source": os.path.basename(a.manual),
@@ -140,6 +150,18 @@ def main():
         text[sr] = new
         applied.append({"strref": sr, "old": old, "new": new, "source": ch["source"],
                         "why": ch["why"], "kind": "line"})
+
+    expanded = []
+    for ch in names:
+        if not ch.get("expand"):
+            continue
+        rx = re.compile(r"\b" + re.escape(ch["en"]) + r"\b")
+        listed = {c["strref"] for c in names if c["en"] == ch["en"] and c["strref"]}
+        for i, e in enumerate(en):
+            if i in listed or not e or not rx.search(e) or not ru[i]:
+                continue
+            expanded.append({**ch, "strref": i, "expand": False})
+    names = [c for c in names if not c.get("expand")] + expanded
 
     for ch in names:                             # then surgical name replacements
         sr = ch["strref"]
