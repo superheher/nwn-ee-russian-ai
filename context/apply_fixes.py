@@ -52,7 +52,7 @@ def validate(old, new, source, full_line):
     return new, None
 
 
-def load_decisions(ddir, expand=False):
+def load_decisions(ddir, expand=False, skip_names=()):
     """-> (full_line changes, name form changes, rejections)"""
     full, names = [], []
     reject_strrefs, reject_forms = set(), set()
@@ -72,7 +72,8 @@ def load_decisions(ddir, expand=False):
 
     for p in sorted(glob.glob(os.path.join(ddir, "names_*.json"))):
         for d in json.load(open(p, encoding="utf-8")).get("decisions", []):
-            if d.get("verdict") != "fix" or not d.get("form_map"):
+            if (d.get("verdict") != "fix" or not d.get("form_map")
+                    or d["en"] in skip_names):
                 continue
             fmap = sorted([(f["from"], f["to"]) for f in d["form_map"]
                            if f.get("from") and f.get("to")],
@@ -124,13 +125,15 @@ def main():
     ap.add_argument("--decisions", required=True)
     ap.add_argument("--manual")
     ap.add_argument("--expand", action="store_true")
+    ap.add_argument("--skip-names", help="json list of decision names to drop entirely")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--report", default=os.path.join(tlkutil.HERE, "fix_report.json"))
     a = ap.parse_args()
 
     en, ru, ref = tlkutil.load_all()
     owner = tlkutil.strref_owner()
-    full, names, rej_sr, rej_forms = load_decisions(a.decisions, a.expand)
+    skip = set(json.load(open(a.skip_names, encoding="utf-8"))) if a.skip_names else set()
+    full, names, rej_sr, rej_forms = load_decisions(a.decisions, a.expand, skip)
     if a.manual:
         for sr, new in json.load(open(a.manual, encoding="utf-8")).items():
             full.append({"strref": int(sr), "new": new, "source": os.path.basename(a.manual),
