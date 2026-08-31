@@ -45,8 +45,14 @@
 art/sound/tile/2da`-хаки — ассеты, текста 0.
 
 **Steam Workshop-айтемы (аккаунт юзера):** `3750140362` (базовый перевод: dialog.tlk+шрифты+
-repository.json), `3750222088` (Furiae: пересобран на `development/`-раскладку). Голосовой
-пак 1С `2270807144` (чужой).
+repository.json), `3750222088` (Furiae: пересобран на `development/`-раскладку), `3763307162`
+(объединённый журнал, скрытый). Голосовой пак 1С `2270807144` (чужой).
+
+**Заливка из-под агента (проверено 31.08.2026):** игра запускается `open steam://rungameid/704450`,
+окно ищется через System Events (`position/size` процесса `nwmain`), снимок — `screencapture -R`,
+консоль — `key code 50`, команда — `keystroke`, ввод — `key code 36`. Результат виден не в
+`nwclientLog1.txt` (пустой), а в `~/Library/Application Support/Steam/logs/workshop_log.txt`:
+строки `Upload starting/finished for workshop item <id>`.
 
 ---
 
