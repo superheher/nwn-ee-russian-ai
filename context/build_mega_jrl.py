@@ -32,7 +32,18 @@ sys.path.insert(0, HERE)
 import erf
 from gff import read_gff, write_gff
 
-MNT = "/Volumes/twitch/nwn/data"
+# campaign modules live in the installed game; the old external mount stays as a fallback
+def _game_data():
+    for c in (os.environ.get("NWN_DATA"),
+              os.path.expanduser("~/Library/Application Support/Steam/steamapps/common/"
+                                 "Neverwinter Nights/data"),
+              "/Volumes/twitch/nwn/data"):
+        if c and os.path.isdir(os.path.join(c, "nwm")):
+            return c
+    return "/Volumes/twitch/nwn/data"
+
+
+MNT = _game_data()
 JRL = 2056
 TITLE = "AI Russian Text Journals"
 
