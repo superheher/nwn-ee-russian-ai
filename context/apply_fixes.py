@@ -95,6 +95,11 @@ def load_decisions(ddir, expand=False):
                 full.append({"strref": int(f["strref"]), "new": f["new_ru"],
                              "source": os.path.basename(p),
                              "why": f"{c['en']}: {f.get('why', '')}"})
+    for p in sorted(glob.glob(os.path.join(ddir, "lines_*.json"))):
+        for f in json.load(open(p, encoding="utf-8")).get("fixes", []):
+            if f.get("new_ru"):
+                full.append({"strref": int(f["strref"]), "new": f["new_ru"],
+                             "source": os.path.basename(p), "why": f.get("why", "")})
     p = os.path.join(ddir, "ui.json")
     if os.path.exists(p):
         for f in json.load(open(p, encoding="utf-8")).get("fixes", []):
