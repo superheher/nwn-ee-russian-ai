@@ -31,7 +31,7 @@ Steps:
 import os, sys, re, json, glob, shutil, subprocess, argparse
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-import erf, nss_lex, ncs
+import erf, nss_lex, ncs, ru_encode
 
 NSS, NCS = 2009, 2010
 INSTALL = os.path.expanduser(
@@ -100,7 +100,7 @@ def main():
         for o in occs:
             f = o["f"]
             if o["k"] == "s":
-                rub = sanitize(ru[i]).encode("cp1251", "replace")
+                rub = ru_encode.cp1251_bytes(sanitize(ru[i]))
                 edits.setdefault(f, []).append((o["r"][0], o["r"][1], rub))
             else:                                   # concat: rebuild the whole expression
                 codes = o["codes"]
@@ -116,7 +116,7 @@ def main():
                         parts.append('"' + sanitize(p) + '"')
                 if not okc or not parts:
                     skipped += 1; continue
-                expr = " + ".join(parts).encode("cp1251", "replace")
+                expr = ru_encode.cp1251_bytes(" + ".join(parts))
                 edits.setdefault(f, []).append((o["span"][0], o["span"][1], expr))
     if skipped:
         print(f"  ! {skipped} concat occurrences skipped (placeholder count mismatch)")
@@ -204,7 +204,7 @@ def main():
             continue
         for ep, rp in zip(eps, rps):
             if ep.strip() and ep != rp:
-                pmap[ep.encode("latin-1", "replace")] = rp.encode("cp1251", "replace")
+                pmap[ep.encode("latin-1", "replace")] = ru_encode.cp1251_bytes(rp)
 
     # ---- 4: inject NCS into the _ru target(s) + optional deploy ---------------
     targets = []

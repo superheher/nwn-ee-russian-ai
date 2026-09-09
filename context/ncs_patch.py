@@ -16,7 +16,7 @@ excluded from the worklist, so this cannot change game logic.
 import os, sys, json, glob, shutil, argparse
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-import erf, ncs
+import erf, ncs, ru_encode
 
 
 def main():
@@ -35,7 +35,7 @@ def main():
         rv = ru.get(i) or ru.get(str(i))
         if isinstance(rv, str) and rv.strip() and rv != en:
             # NCS strings are length-prefixed (no quote escaping needed); cp1251 round-trips
-            repl[en.encode("cp1251", "replace")] = rv.encode("cp1251", "replace")
+            repl[ru_encode.en_bytes(en)] = ru_encode.cp1251_bytes(rv)
     print(f"translations: {len(repl)} / {len(id2en)} worklist strings")
 
     for m, c in cfg.items():

@@ -15,7 +15,7 @@ repacks the ERF -> ddf/DDF_ru.nwm. Untranslated strings stay English.
 import os, sys, json, glob, argparse, shutil
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-import erf, gff
+import erf, gff, ru_encode
 
 MOUNT_MOD = "/Volumes/twitch/nwn/data/nwm/Neverwinter Nights - Dark Dreams of Furiae.nwm"
 
@@ -71,7 +71,7 @@ def main():
         n = 0
         for path, loc in gff.iter_locstrings(root):
             if path in pm:
-                rub = pm[path].encode("cp1251", "replace")
+                rub = ru_encode.cp1251_bytes(pm[path])
                 loc["subs"] = [(sid, rub) for (sid, _b) in loc["subs"]] or [(0, rub)]
                 n += 1
         if n:
