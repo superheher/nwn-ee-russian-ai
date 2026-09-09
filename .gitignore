@@ -17,6 +17,7 @@ glossary/mined_glossary.tsv
 glossary/anchors.txt
 context/pilot_input.json
 context/pilot_output.json
+context/player_report_fixes.json
 
 # Derived inputs - regenerable from the game + scripts (not committed)
 context/convos/
