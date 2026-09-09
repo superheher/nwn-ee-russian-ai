@@ -51,6 +51,24 @@ def load_translations(tdir):
     return merged, conflicts, files
 
 
+def check_cp1251(trans):
+    """A stray typographic character (a stress mark, a minus sign) survives the
+    whole pipeline and only turns into '?' here, in the middle of a word, where
+    a player is the one who finds it. Report those before writing."""
+    out = []
+    for sr, ru in sorted(trans.items()):
+        bad = []
+        for ch in ru:
+            try:
+                ch.encode("cp1251")
+            except UnicodeEncodeError:
+                if ch not in bad:
+                    bad.append(ch)
+        if bad:
+            out.append((sr, bad))
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true")
@@ -65,6 +83,13 @@ def main():
     if conflicts[:5]:
         for sr, p in conflicts[:5]:
             print(f"  conflict @{sr} (kept last) <- {os.path.relpath(p, HERE)}")
+
+    lossy = check_cp1251(trans)
+    if lossy:
+        print(f"WARNING: {len(lossy)} strings contain characters CP1251 cannot "
+              f"encode; they would ship as '?' in-game:")
+        for sr, chars in lossy[:10]:
+            print(f"  @{sr}: " + " ".join(f"U+{ord(c):04X} {c!r}" for c in chars))
 
     if args.check or not trans:
         # coverage vs the translatable universe
