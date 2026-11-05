@@ -57,6 +57,14 @@ dlc/*/*.mod
 dlc/*/*.hak
 dlc/*/override/
 
+# Voice dubbing experiments: game audio (IP) + venvs + generated TTS — not
+# committed. voice_training scripts/docs stay committable; cast_compare/ holds
+# audio samples. .venv-f5/ is not matched by the .venv/ rule above (other name).
+voice_data/
+voice_pilot/
+voice_training/cast_compare/
+.venv-f5/
+
 # macOS
 .DS_Store
 tools/
